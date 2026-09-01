@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grafika Komputer — Beranda</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="home">
+
+<div class="topbar">
+  <button class="menu-btn" data-menu-toggle aria-label="Buka menu"></button>
+  <div class="brand-text"><strong>Graphics Playground</strong></div>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-text">
+        <strong>Graphics Playground</strong>
+        <span>Praktikum Grafika Komputer</span>
+      </div>
+    </div>
+
+    <div class="nav-section-label">Menu</div>
+    <ul class="nav-list">
+      <li><a class="nav-link" data-page="home" href="index.html">Beranda</a></li>
+    </ul>
+
+    <div class="nav-section-label">Praktikum</div>
+    <ul class="nav-list">
+      <li>
+        <a class="nav-link" data-page="p1" href="praktikum1.html">
+          Praktikum 1 — Canvas 2D
+          <span class="nav-badge live">Live</span>
+        </a>
+      </li>
+      <li>
+        <span class="nav-link disabled">
+          Praktikum 2 — WebGL Fundamentals
+          <span class="nav-badge soon">Segera</span>
+        </span>
+      </li>
+      <li>
+        <span class="nav-link disabled">
+          Praktikum 3
+          <span class="nav-badge soon">Segera</span>
+        </span>
+      </li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <div class="eyebrow">Mata Kuliah Grafika Komputer</div>
+    <h1 class="page-title">Graphics Playground</h1>
+    <p class="lede">
+      Situs ini merangkum seluruh praktikum Grafika Komputer dalam satu tempat. Setiap pertemuan
+      ditambahkan sebagai halaman baru di sidebar, sehingga progres dari Canvas 2D dasar hingga
+      WebGL dapat ditelusuri dari satu website yang sama.
+    </p>
+
+    <section class="block">
+      <div class="section-heading">
+        <h2>Daftar Praktikum</h2>
+      </div>
+      <div class="card-grid">
+        <a class="card live" href="praktikum1.html">
+          <span class="tag">Pertemuan 1</span>
+          <h3>Canvas 2D — Graphics Playground</h3>
+          <p>
+            Pengenalan koordinat canvas, primitif 2D (rectangle, line, circle, triangle),
+            animasi dengan requestAnimationFrame, serta interaksi mouse &amp; keyboard.
+          </p>
+          <span class="go">Buka praktikum →</span>
+        </a>
+
+        <div class="card soon">
+          <span class="tag">Pertemuan 2</span>
+          <h3>WebGL Fundamentals</h3>
+          <p>Melanjutkan konsep primitif 2D ke graphics pipeline berbasis GPU dengan WebGL.</p>
+          <span class="go" style="color: var(--text-faint);">Segera hadir</span>
+        </div>
+
+        <div class="card soon">
+          <span class="tag">Pertemuan 3</span>
+          <h3>Menyusul</h3>
+          <p>Materi praktikum berikutnya akan muncul di sini setelah tersedia.</p>
+          <span class="go" style="color: var(--text-faint);">Segera hadir</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <span>Graphics Playground · Tugas Praktikum Grafika Komputer</span>
+      <span>Dibuat dengan HTML, CSS, dan JavaScript murni</span>
+    </div>
+  </main>
+</div>
+
+<script src="js/nav.js"></script>
+</body>
+</html>
