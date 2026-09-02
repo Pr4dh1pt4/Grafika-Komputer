@@ -1,19 +1,3 @@
-// Praktikum 1 — Graphics Playground (app.js)
-//
-// Lima canvas independen, masing-masing berukuran 850x600 sesuai ketentuan tugas:
-//   1) Primitive Drawer      -> #canvas-primitives  (primitive, koordinat, warna, data->gambar)
-//   2) Bouncing Object        -> #canvas-anim         (Challenge A: Position + Velocity + Boundary Check)
-//   3) Follow Mouse           -> #canvas-follow        (EVENT-BASED, mouse — Challenge B/C)
-//   4) Keyboard Step          -> #canvas-key-event     (EVENT-BASED, keyboard)
-//   5) Keyboard Translation   -> #canvas-keystate      (STATE-BASED, keyboard — Challenge D)
-//
-// Poin penting untuk dibandingkan: canvas 3 & 4 mengubah posisi langsung di
-// dalam event handler itu sendiri (mousemove/click/keydown) tanpa loop
-// polling — objek diam jika tidak ada event baru. Canvas 5 sebaliknya hanya
-// menyimpan status tombol di objek `keys{}` di dalam event handler, lalu
-// requestAnimationFrame() membaca ulang status itu SETIAP frame untuk
-// menggerakkan objek, sehingga gerakannya tetap mulus selama tombol ditahan.
-
 (function () {
   "use strict";
 
