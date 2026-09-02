@@ -1,461 +1,477 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Praktikum 1 — Graphics Playground</title>
-<link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praktikum 1 — Graphics Playground</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body data-page="p1">
 
-<div class="topbar">
-  <button class="menu-btn" data-menu-toggle aria-label="Buka menu"></button>
-  <div class="brand-text"><strong>Praktikum 1</strong></div>
-</div>
+  <div class="topbar">
+    <button class="menu-btn" data-menu-toggle aria-label="Buka menu"></button>
+    <div class="brand-text"><strong>Praktikum 1</strong></div>
+  </div>
 
-<div class="shell">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-mark"></div>
-      <div class="brand-text">
-        <strong>Tim Murid Bapak</strong>
-        <span>Praktikum Grafika Komputer</span>
-      </div>
-    </div>
-
-    <div class="nav-section-label">Menu</div>
-    <ul class="nav-list">
-      <li><a class="nav-link" data-page="home" href="index.html">Beranda</a></li>
-    </ul>
-
-    <div class="nav-section-label">Praktikum</div>
-    <ul class="nav-list">
-      <li>
-        <a class="nav-link" data-page="p1" href="praktikum1.html">
-          Praktikum 1 — Canvas 2D
-          <span class="nav-badge live">Live</span>
-        </a>
-      </li>
-    
-    </ul>
-  </aside>
-
-  <main class="main">
-    <div class="eyebrow">Praktikum 1</div>
-    <h1 class="page-title">Graphics Playground — Canvas 2D Dasar</h1>
-
-    <!-- 1. DESKRIPSI -->
-    <section class="block">
-      <div class="section-heading">
-        <h2>Deskripsi Praktikum</h2>
-      </div>
-      <p>
-        Membuat beberapa primitif 2D, memberi warna, membuat satu objek bergerak, dan
-        menambahkan interaksi pengguna.
-      </p>
-      <div class="flow-box">
-        <div class="flow-step">Create Canvas</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">Draw Primitive</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">Set Color &amp; Position</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">Animate</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">Add Interaction</div>
-      </div>
-    </section>
-
-    <!-- 2b. KETENTUAN TUGAS UTAMA & CHALLENGE (rubrik detail) -->
-    <section class="block">
-      <div class="section-heading">
-        <h2>Ketentuan Tugas Utama &amp; Challenge</h2>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div class="brand-text">
+          <strong>Tim Murid Bapak</strong>
+          <span>Praktikum Grafika Komputer</span>
+        </div>
       </div>
 
-      <ul class="objectives">
-        <li><span class="idx">01</span><span>Canvas berukuran minimal 800×500.</span><span class="check">✓ semua canvas 850×600</span></li>
-        <li><span class="idx">02</span><span>Minimal 3 jenis primitive berbeda.</span><span class="check">✓ rectangle, line, circle, triangle</span></li>
-        <li><span class="idx">03</span><span>Minimal 4 warna yang terlihat.</span><span class="check">✓ teal, violet, pink, amber</span></li>
-        <li><span class="idx">04</span><span>Minimal 1 triangle dari tiga koordinat vertex.</span><span class="check">✓ p1, p2, p3 (lihat data live)</span></li>
-        <li><span class="idx">05</span><span>Minimal 1 objek bergerak.</span><span class="check">✓ Challenge A — Bouncing Object</span></li>
-        <li><span class="idx">06</span><span>Minimal 1 translasi keyboard state-based.</span><span class="check">✓ Challenge D — objek keys{}</span></li>
-        <li><span class="idx">07</span><span>Tampilan koordinat mouse.</span><span class="check">✓ Challenge E</span></li>
-        <li><span class="idx">08</span><span>Source terpisah minimal index.html + app.js.</span><span class="check">✓ praktikum1.html + js/praktikum1.js</span></li>
-        <li><span class="idx">09</span><span>Komentar pada bagian penting kode.</span><span class="check">✓ lihat js/praktikum1.js</span></li>
-        <li><span class="idx">10</span><span>Berjalan langsung di browser tanpa build step.</span><span class="check">✓</span></li>
+      <div class="nav-section-label">Menu</div>
+      <ul class="nav-list">
+        <li><a class="nav-link" data-page="home" href="index.html">Beranda</a></li>
       </ul>
-      <p style="margin-top:16px;">
-        <br>
-        <strong>Challenge yang dikerjakan:</strong> <br>
-        <br>A = Bouncing Object,
-        <br>B = Follow Mouse,
-        <br>C = Click to Change Color, 
-        <br>D = Keyboard Movement (state-based), 
-        <br>E = Mouse Coordinate.<br>
-        <br>Seluruh lima challenge diimplementasikan pada canvas terpisah — termasuk dua contoh
-        <strong>event-based</strong> (mouse pada Follow Mouse, keyboard pada Keyboard Step)
-        yang sengaja dipisah dari canvas <strong>state-based</strong> (Keyboard Translation)
-        supaya kedua paradigma input mudah dibandingkan langsung.
-      </p>
-    </section>
 
-    <!-- 3. PRIMITIF & KOORDINAT -->
-    <section class="block">
-      <div class="section-heading">
-        <span class="num">01</span>
-        <h2>Canvas, Koordinat &amp; Primitif 2D</h2>
-      </div>
-      <p>
-        Origin <code>(0,0)</code> canvas berada di pojok kiri atas: sumbu X bertambah ke kanan,
-        sumbu Y bertambah ke bawah. Klik lalu seret pada canvas di bawah untuk menggambar bentuk
-        terpilih — perhatikan panel data di kanan yang menunjukkan bahwa gambar sepenuhnya
-        ditentukan oleh angka (posisi &amp; ukuran) dan warna. Canvas dimuat dengan 4 contoh
-        primitive (rectangle, line, circle, triangle) dalam 4 warna berbeda sesuai ketentuan tugas.
-      </p>
+      <div class="nav-section-label">Praktikum</div>
+      <ul class="nav-list">
+        <li>
+          <a class="nav-link" data-page="p1" href="praktikum1.html">
+            Praktikum 1 — Canvas 2D
+            <span class="nav-badge live">Live</span>
+          </a>
+        </li>
 
-      <div class="playground">
-        <div class="playground-header">
-          <div>
-            <h3>Primitive Drawer</h3>
-            <p class="desc">Klik + seret di canvas untuk menggambar. Data bentuk diperbarui secara live. Canvas: 850×600.</p>
-          </div>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="eyebrow">Praktikum 1</div>
+      <h1 class="page-title">Graphics Playground — Canvas 2D Dasar</h1>
+
+      <!-- 1. DESKRIPSI -->
+      <section class="block">
+        <div class="section-heading">
+          <h2>Deskripsi Praktikum</h2>
         </div>
-        <div class="playground-body">
-          <div class="canvas-wrap">
-            <canvas id="canvas-primitives" width="850" height="600"></canvas>
-            <div class="stat-row">
-              <span>Objek: <b id="p1-count">0</b></span>
-              <span>Kursor: <b id="p1-cursor">-, -</b></span>
+        <p>
+          Membuat beberapa primitif 2D, memberi warna, membuat satu objek bergerak, dan
+          menambahkan interaksi pengguna.
+        </p>
+        <div class="flow-box">
+          <div class="flow-step">Create Canvas</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Draw Primitive</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Set Color &amp; Position</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Animate</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Add Interaction</div>
+        </div>
+      </section>
+
+      <!-- 2b. KETENTUAN TUGAS UTAMA & CHALLENGE (rubrik detail) -->
+      <section class="block">
+        <div class="section-heading">
+          <h2>Ketentuan Tugas Utama &amp; Challenge</h2>
+        </div>
+
+        <ul class="objectives">
+          <li><span class="idx">01</span><span>Canvas berukuran minimal 800×500.</span><span class="check">✓ semua
+              canvas 850×600</span></li>
+          <li><span class="idx">02</span><span>Minimal 3 jenis primitive berbeda.</span><span class="check">✓ rectangle,
+              line, circle, triangle</span></li>
+          <li><span class="idx">03</span><span>Minimal 4 warna yang terlihat.</span><span class="check">✓ teal, violet,
+              pink, amber</span></li>
+          <li><span class="idx">04</span><span>Minimal 1 triangle dari tiga koordinat vertex.</span><span
+              class="check">✓ p1, p2, p3 (lihat data live)</span></li>
+          <li><span class="idx">05</span><span>Minimal 1 objek bergerak.</span><span class="check">✓ Challenge A —
+              Bouncing Object</span></li>
+          <li><span class="idx">06</span><span>Minimal 1 translasi keyboard state-based.</span><span class="check">✓
+              Challenge D — objek keys{}</span></li>
+          <li><span class="idx">07</span><span>Tampilan koordinat mouse.</span><span class="check">✓ Challenge E</span>
+          </li>
+          <li><span class="idx">08</span><span>Source terpisah minimal index.html + app.js.</span><span class="check">✓
+              praktikum1.html + js/praktikum1.js</span></li>
+          <li><span class="idx">09</span><span>Komentar pada bagian penting kode.</span><span class="check">✓ lihat
+              js/praktikum1.js</span></li>
+          <li><span class="idx">10</span><span>Berjalan langsung di browser tanpa build step.</span><span
+              class="check">✓</span></li>
+        </ul>
+        <p style="margin-top:16px;">
+          <br>
+          <strong>Challenge yang dikerjakan:</strong> <br>
+          <br>A = Bouncing Object,
+          <br>B = Follow Mouse,
+          <br>C = Click to Change Color,
+          <br>D = Keyboard Movement (state-based),
+          <br>E = Mouse Coordinate.<br>
+          <br>Seluruh lima challenge diimplementasikan pada canvas terpisah — termasuk dua contoh
+          <strong>event-based</strong> (mouse pada Follow Mouse, keyboard pada Keyboard Step)
+          yang sengaja dipisah dari canvas <strong>state-based</strong> (Keyboard Translation)
+          supaya kedua paradigma input mudah dibandingkan langsung.
+        </p>
+      </section>
+
+      <!-- 3. PRIMITIF & KOORDINAT -->
+      <section class="block">
+        <div class="section-heading">
+          <span class="num">01</span>
+          <h2>Canvas, Koordinat &amp; Primitif 2D</h2>
+        </div>
+        <p>
+          Origin <code>(0,0)</code> canvas berada di pojok kiri atas: sumbu X bertambah ke kanan,
+          sumbu Y bertambah ke bawah. Klik lalu seret pada canvas di bawah untuk menggambar bentuk
+          terpilih — perhatikan panel data di kanan yang menunjukkan bahwa gambar sepenuhnya
+          ditentukan oleh angka (posisi &amp; ukuran) dan warna. Canvas dimuat dengan 4 contoh
+          primitive (rectangle, line, circle, triangle) dalam 4 warna berbeda sesuai ketentuan tugas.
+        </p>
+
+        <div class="playground">
+          <div class="playground-header">
+            <div>
+              <h3>Primitive Drawer</h3>
+              <p class="desc">Klik + seret di canvas untuk menggambar. Data bentuk diperbarui secara live. Canvas:
+                850×600.</p>
             </div>
           </div>
-          <div class="controls">
-            <div class="control-group">
-              <label>Bentuk</label>
-              <div class="btn-row" id="p1-shapes">
-                <button class="btn active" data-shape="rectangle">Rectangle</button>
-                <button class="btn" data-shape="line">Line</button>
-                <button class="btn" data-shape="circle">Circle</button>
-                <button class="btn" data-shape="triangle">Triangle</button>
+          <div class="playground-body">
+            <div class="canvas-wrap">
+              <canvas id="canvas-primitives" width="850" height="600"></canvas>
+              <div class="stat-row">
+                <span>Objek: <b id="p1-count">0</b></span>
+                <span>Kursor: <b id="p1-cursor">-, -</b></span>
               </div>
             </div>
-
-            <div class="control-group">
-              <label>Warna</label>
-              <div class="color-row">
-                <div class="color-field">
-                  <span>Fill</span>
-                  <input type="color" id="p1-fill" value="#5eead4" />
+            <div class="controls">
+              <div class="control-group">
+                <label>Bentuk</label>
+                <div class="btn-row" id="p1-shapes">
+                  <button class="btn active" data-shape="rectangle">Rectangle</button>
+                  <button class="btn" data-shape="line">Line</button>
+                  <button class="btn" data-shape="circle">Circle</button>
+                  <button class="btn" data-shape="triangle">Triangle</button>
                 </div>
-                <div class="color-field">
-                  <span>Stroke</span>
-                  <input type="color" id="p1-stroke" value="#a78bfa" />
+              </div>
+
+              <div class="control-group">
+                <label>Warna</label>
+                <div class="color-row">
+                  <div class="color-field">
+                    <span>Fill</span>
+                    <input type="color" id="p1-fill" value="#5eead4" />
+                  </div>
+                  <div class="color-field">
+                    <span>Stroke</span>
+                    <input type="color" id="p1-stroke" value="#a78bfa" />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="control-group">
-              <label>Stroke width: <span id="p1-strokewidth-val">3</span>px</label>
-              <input type="range" id="p1-strokewidth" min="1" max="14" value="3" />
-            </div>
-
-            <div class="control-group">
-              <label class="check-row"><input type="checkbox" id="p1-filled" checked /> Isi bentuk (filled)</label>
-              <label class="check-row"><input type="checkbox" id="p1-grid" checked /> Tampilkan grid koordinat</label>
-            </div>
-
-            <div class="control-group">
-              <div class="btn-row">
-                <button class="btn" id="p1-undo">Undo</button>
-                <button class="btn" id="p1-clear">Clear</button>
+              <div class="control-group">
+                <label>Stroke width: <span id="p1-strokewidth-val">3</span>px</label>
+                <input type="range" id="p1-strokewidth" min="1" max="14" value="3" />
               </div>
-            </div>
 
-            <div class="control-group">
-              <label>Data bentuk (live)</label>
-              <div class="readout" id="p1-readout">// seret pada canvas untuk mulai menggambar</div>
+              <div class="control-group">
+                <label class="check-row"><input type="checkbox" id="p1-filled" checked /> Isi bentuk (filled)</label>
+                <label class="check-row"><input type="checkbox" id="p1-grid" checked /> Tampilkan grid koordinat</label>
+              </div>
+
+              <div class="control-group">
+                <div class="btn-row">
+                  <button class="btn" id="p1-undo">Undo</button>
+                  <button class="btn" id="p1-clear">Clear</button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>Data bentuk (live)</label>
+                <div class="readout" id="p1-readout">// seret pada canvas untuk mulai menggambar</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 4. ANIMASI: BOUNCING OBJECT (Challenge A) -->
-    <section class="block">
-      <div class="section-heading">
-        <span class="num">02</span>
-        <h2>Animasi: Bouncing Object <span style="color:var(--text-faint); font-weight:400;">— Challenge A</span></h2>
-      </div>
-      <p>
-        Objek dianimasikan per-frame dengan <code>requestAnimationFrame()</code> memakai pola
-        klasik <strong>Position + Velocity + Boundary Check</strong>: posisi bertambah dengan
-        kecepatan tiap frame, lalu dicek apakah menyentuh tepi canvas untuk membalik arah. Bola
-        biru memantul bebas ke segala arah (vx &amp; vy), sedangkan batang oranye di bawahnya
-        sengaja dibuat <strong>hanya bergerak horizontal</strong> — <code>vy</code> selalu 0,
-        posisi Y tetap, dan boundary check hanya dicek pada sumbu X (kiri/kanan).
-      </p>
-
-      <div class="playground">
-        <div class="playground-header">
-          <div>
-            <h3>Bouncing Object</h3>
-            <p class="desc">Klik canvas untuk menambah bola pantul warna acak. Canvas: 850×600.</p>
-          </div>
+      <!-- 4. ANIMASI: BOUNCING OBJECT (Challenge A) -->
+      <section class="block">
+        <div class="section-heading">
+          <span class="num">02</span>
+          <h2>Animasi: Bouncing Object <span style="color:var(--text-faint); font-weight:400;">— Challenge A</span></h2>
         </div>
-        <div class="playground-body">
-          <div class="canvas-wrap">
-            <canvas id="canvas-anim" width="850" height="600"></canvas>
-            <div class="stat-row">
-              <span>Bola: <b id="p2-count">0</b></span>
-              <span>Batang horizontal: <b id="p2-hbar">vy = 0</b></span>
-              <span>Status: <b id="p2-status">Berjalan</b></span>
+        <p>
+          Objek dianimasikan per-frame dengan <code>requestAnimationFrame()</code> memakai pola
+          klasik <strong>Position + Velocity + Boundary Check</strong>: posisi bertambah dengan
+          kecepatan tiap frame, lalu dicek apakah menyentuh tepi canvas untuk membalik arah. Bola
+          biru memantul bebas ke segala arah (vx &amp; vy), sedangkan batang oranye di bawahnya
+          sengaja dibuat <strong>hanya bergerak horizontal</strong> — <code>vy</code> selalu 0,
+          posisi Y tetap, dan boundary check hanya dicek pada sumbu X (kiri/kanan).
+        </p>
+
+        <div class="playground">
+          <div class="playground-header">
+            <div>
+              <h3>Bouncing Object</h3>
+              <p class="desc">Klik canvas untuk menambah bola pantul warna acak. Canvas: 850×600.</p>
             </div>
           </div>
-          <div class="controls">
-            <div class="control-group">
-              <div class="btn-row">
-                <button class="btn primary" id="p2-playpause">Pause</button>
-                <button class="btn" id="p2-reset">Reset</button>
-                <button class="btn" id="p2-clearballs">Clear Bola</button>
+          <div class="playground-body">
+            <div class="canvas-wrap">
+              <canvas id="canvas-anim" width="850" height="600"></canvas>
+              <div class="stat-row">
+                <span>Bola: <b id="p2-count">0</b></span>
+                <span>Batang horizontal: <b id="p2-hbar">vy = 0</b></span>
+                <span>Status: <b id="p2-status">Berjalan</b></span>
               </div>
             </div>
-
-            <div class="control-group">
-              <label>Kecepatan animasi: <span id="p2-speed-val">1.0x</span></label>
-              <input type="range" id="p2-speed" min="0.2" max="3" step="0.1" value="1" />
-            </div>
-
-            <div class="control-group">
-              <label class="check-row"><input type="checkbox" id="p2-gravity" /> Aktifkan gravitasi</label>
-            </div>
-
-            <div class="control-group">
-              <label>Kontrol</label>
-              <div class="hint">
-                <div><kbd>Klik</kbd> canvas — spawn bola pantul warna acak di titik klik (mouse event)</div>
-                <div style="margin-top:6px;"><kbd>Space</kbd> — pause / lanjutkan animasi</div>
+            <div class="controls">
+              <div class="control-group">
+                <div class="btn-row">
+                  <button class="btn primary" id="p2-playpause">Pause</button>
+                  <button class="btn" id="p2-reset">Reset</button>
+                  <button class="btn" id="p2-clearballs">Clear Bola</button>
+                </div>
               </div>
-            </div>
 
-            <div class="control-group">
-              <label>Frame data (live)</label>
-              <div class="readout" id="p2-readout">// requestAnimationFrame belum berjalan</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. EVENT-BASED: FOLLOW MOUSE (Challenge B + C) -->
-    <section class="block">
-      <div class="section-heading">
-        <span class="num">03</span>
-        <h2>Interaksi Event-Based: Follow Mouse <span style="color:var(--text-faint); font-weight:400;">— Challenge B &amp; C</span></h2>
-      </div>
-      <p>
-        Pola <strong>event-based</strong>: posisi objek hanya berubah tepat pada saat event
-        <code>mousemove</code> ditembak oleh browser — <code>circle.x = mouse.x; circle.y = mouse.y</code>.
-        Tidak ada loop yang "menanyakan" posisi setiap frame; objek diam total jika tidak ada event baru.
-        Klik canvas untuk memicu event <code>click</code> yang mengganti warna (Challenge C).
-      </p>
-
-      <div class="playground">
-        <div class="playground-header">
-          <div>
-            <h3>Follow Mouse</h3>
-            <p class="desc">Gerakkan mouse di atas canvas. Klik untuk mengganti warna lingkaran. Canvas: 850×600.</p>
-          </div>
-        </div>
-        <div class="playground-body">
-          <div class="canvas-wrap">
-            <canvas id="canvas-follow" width="850" height="600"></canvas>
-            <div class="stat-row">
-              <span>Mouse: <b id="p3-cursor">-, -</b></span>
-              <span>Klik: <b id="p3-clicks">0</b></span>
-            </div>
-          </div>
-          <div class="controls">
-            <div class="control-group">
-              <label class="check-row"><input type="checkbox" id="p3-trail" checked /> Tampilkan jejak (trail)</label>
-            </div>
-            <div class="control-group">
-              <div class="btn-row">
-                <button class="btn" id="p3-reset">Reset Warna</button>
+              <div class="control-group">
+                <label>Kecepatan animasi: <span id="p2-speed-val">1.0x</span></label>
+                <input type="range" id="p2-speed" min="0.2" max="3" step="0.1" value="1" />
               </div>
-            </div>
-            <div class="control-group">
-              <label>Kontrol</label>
-              <div class="hint">
-                <div><kbd>mousemove</kbd> — lingkaran mengikuti posisi mouse secara langsung (event-based, tanpa polling)</div>
-                <div style="margin-top:6px;"><kbd>click</kbd> — ganti warna lingkaran secara acak</div>
+
+              <div class="control-group">
+                <label class="check-row"><input type="checkbox" id="p2-gravity" /> Aktifkan gravitasi</label>
               </div>
-            </div>
-            <div class="control-group">
-              <label>Event data (live)</label>
-              <div class="readout" id="p3-readout">// gerakkan mouse ke atas canvas</div>
+
+              <div class="control-group">
+                <label>Kontrol</label>
+                <div class="hint">
+                  <div><kbd>Klik</kbd> canvas — spawn bola pantul warna acak di titik klik (mouse event)</div>
+                  <div style="margin-top:6px;"><kbd>Space</kbd> — pause / lanjutkan animasi</div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>Frame data (live)</label>
+                <div class="readout" id="p2-readout">// requestAnimationFrame belum berjalan</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 6. EVENT-BASED: KEYBOARD STEP -->
-    <section class="block">
-      <div class="section-heading">
-        <span class="num">04</span>
-        <h2>Interaksi Event-Based: Keyboard Step</h2>
-      </div>
-      <p>
-        Contoh event-based kedua, kali ini pada <strong>keyboard</strong>, supaya
-        perbandingannya apel-ke-apel dengan canvas state-based di bawah (input sama,
-        paradigma beda). Setiap event <code>keydown</code> — termasuk native
-        <em>key-repeat</em> browser saat tombol ditahan — menggeser sebuah
-        <strong>target</strong> posisi sejauh satu langkah. Kotak yang digambar hanya
-        "mengejar" target itu sedikit demi sedikit tiap frame (easing) agar gerakannya
-        halus dan tombol bisa ditahan tanpa perlu tap-tap. Yang membuatnya tetap
-        <strong>event-based</strong>: target hanya pernah berubah di dalam handler
-        <code>keydown</code> — loop animasinya sendiri tidak pernah menambah jarak,
-        beda dengan canvas state-based di bawah yang membaca status setiap frame.
-      </p>
-
-      <div class="playground">
-        <div class="playground-header">
-          <div>
-            <h3>Keyboard Step</h3>
-            <p class="desc">Klik canvas untuk fokus, lalu tahan panah / WASD — bisa ditekan lama, tidak perlu tap-tap. Canvas: 850×600.</p>
-          </div>
+      <!-- 5. EVENT-BASED: FOLLOW MOUSE (Challenge B + C) -->
+      <section class="block">
+        <div class="section-heading">
+          <span class="num">03</span>
+          <h2>Interaksi Event-Based: Follow Mouse <span style="color:var(--text-faint); font-weight:400;">— Challenge B
+              &amp; C</span></h2>
         </div>
-        <div class="playground-body">
-          <div class="canvas-wrap">
-            <canvas id="canvas-key-event" width="850" height="600" tabindex="0"></canvas>
-            <div class="stat-row">
-              <span>Posisi: <b id="p4b-pos">425, 300</b></span>
-              <span>Event: <b id="p4b-steps">0</b></span>
+        <p>
+          Pola <strong>event-based</strong>: posisi objek hanya berubah tepat pada saat event
+          <code>mousemove</code> ditembak oleh browser — <code>circle.x = mouse.x; circle.y = mouse.y</code>.
+          Tidak ada loop yang "menanyakan" posisi setiap frame; objek diam total jika tidak ada event baru.
+          Klik canvas untuk memicu event <code>click</code> yang mengganti warna (Challenge C).
+        </p>
+
+        <div class="playground">
+          <div class="playground-header">
+            <div>
+              <h3>Follow Mouse</h3>
+              <p class="desc">Gerakkan mouse di atas canvas. Klik untuk mengganti warna lingkaran. Canvas: 850×600.</p>
             </div>
           </div>
-          <div class="controls">
-            <div class="control-group">
-              <div class="btn-row">
-                <button class="btn" id="p4b-reset">Reset Posisi</button>
+          <div class="playground-body">
+            <div class="canvas-wrap">
+              <canvas id="canvas-follow" width="850" height="600"></canvas>
+              <div class="stat-row">
+                <span>Mouse: <b id="p3-cursor">-, -</b></span>
+                <span>Klik: <b id="p3-clicks">0</b></span>
               </div>
             </div>
-
-            <div class="control-group">
-              <label>Kontrol</label>
-              <div class="hint">
-                <div><kbd>↑ ↓ ← →</kbd> / <kbd>W A S D</kbd> — tahan untuk bergerak mulus; tiap event <code>keydown</code> menggeser target 16px, digambar dengan easing</div>
+            <div class="controls">
+              <div class="control-group">
+                <label class="check-row"><input type="checkbox" id="p3-trail" checked /> Tampilkan jejak (trail)</label>
               </div>
-            </div>
-
-            <div class="control-group">
-              <label>Log event (live, 6 terakhir)</label>
-              <div class="readout" id="p4b-readout">// tahan tombol panah/WASD -- tidak perlu tap-tap</div>
+              <div class="control-group">
+                <div class="btn-row">
+                  <button class="btn" id="p3-reset">Reset Warna</button>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Kontrol</label>
+                <div class="hint">
+                  <div><kbd>mousemove</kbd> — lingkaran mengikuti posisi mouse secara langsung (event-based, tanpa
+                    polling)</div>
+                  <div style="margin-top:6px;"><kbd>click</kbd> — ganti warna lingkaran secara acak</div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Event data (live)</label>
+                <div class="readout" id="p3-readout">// gerakkan mouse ke atas canvas</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 7. STATE-BASED: KEYBOARD TRANSLATION (Challenge D) -->
-    <section class="block">
-      <div class="section-heading">
-        <span class="num">05</span>
-        <h2>Interaksi State-Based: Keyboard Translation <span style="color:var(--text-faint); font-weight:400;">— Challenge D</span></h2>
-      </div>
-      <p>
-        Pola <strong>state-based</strong>: <code>keydown</code>/<code>keyup</code> hanya
-        mengubah sebuah objek status <code>keys{}</code> (true/false). Pergerakan sebenarnya
-        dibaca dan diterapkan terus-menerus di dalam loop <code>requestAnimationFrame()</code>,
-        sehingga kotak tetap bergerak mulus selama tombol ditahan — bukan hanya sekali per event.
-      </p>
-
-      <div class="playground">
-        <div class="playground-header">
-          <div>
-            <h3>Keyboard Translation</h3>
-            <p class="desc">Klik canvas untuk fokus, lalu tahan panah / WASD. Canvas: 850×600.</p>
-          </div>
+      <!-- 6. EVENT-BASED: KEYBOARD STEP -->
+      <section class="block">
+        <div class="section-heading">
+          <span class="num">04</span>
+          <h2>Interaksi Event-Based: Keyboard Step</h2>
         </div>
-        <div class="playground-body">
-          <div class="canvas-wrap">
-            <canvas id="canvas-keystate" width="850" height="600" tabindex="0"></canvas>
-            <div class="stat-row">
-              <span>Posisi: <b id="p4-pos">400, 250</b></span>
-              <span>Kecepatan: <b id="p4-speed">4 px/frame</b></span>
+        <p>
+          Contoh event-based kedua, kali ini pada <strong>keyboard</strong>, supaya
+          perbandingannya apel-ke-apel dengan canvas state-based di bawah (input sama,
+          paradigma beda). Setiap event <code>keydown</code> — termasuk native
+          <em>key-repeat</em> browser saat tombol ditahan — menggeser sebuah
+          <strong>target</strong> posisi sejauh satu langkah. Kotak yang digambar hanya
+          "mengejar" target itu sedikit demi sedikit tiap frame (easing) agar gerakannya
+          halus dan tombol bisa ditahan tanpa perlu tap-tap. Yang membuatnya tetap
+          <strong>event-based</strong>: target hanya pernah berubah di dalam handler
+          <code>keydown</code> — loop animasinya sendiri tidak pernah menambah jarak,
+          beda dengan canvas state-based di bawah yang membaca status setiap frame.
+        </p>
+
+        <div class="playground">
+          <div class="playground-header">
+            <div>
+              <h3>Keyboard Step</h3>
+              <p class="desc">Klik canvas untuk fokus, lalu tahan panah / WASD — bisa ditekan lama, tidak perlu tap-tap.
+                Canvas: 850×600.</p>
             </div>
           </div>
-          <div class="controls">
-            <div class="control-group">
-              <label>Status tombol (objek keys{} — live)</label>
-              <div class="key-grid">
-                <div class="key-badge empty"></div>
-                <div class="key-badge" data-key="up">↑ / W</div>
-                <div class="key-badge empty"></div>
-                <div class="key-badge" data-key="left">← / A</div>
-                <div class="key-badge" data-key="down">↓ / S</div>
-                <div class="key-badge" data-key="right">→ / D</div>
+          <div class="playground-body">
+            <div class="canvas-wrap">
+              <canvas id="canvas-key-event" width="850" height="600" tabindex="0"></canvas>
+              <div class="stat-row">
+                <span>Posisi: <b id="p4b-pos">425, 300</b></span>
+                <span>Event: <b id="p4b-steps">0</b></span>
               </div>
             </div>
-
-            <div class="control-group">
-              <div class="btn-row">
-                <button class="btn" id="p4-reset">Reset Posisi</button>
+            <div class="controls">
+              <div class="control-group">
+                <div class="btn-row">
+                  <button class="btn" id="p4b-reset">Reset Posisi</button>
+                </div>
               </div>
-            </div>
 
-            <div class="control-group">
-              <label>Kontrol</label>
-              <div class="hint">
-                <div><kbd>↑ ↓ ← →</kbd> / <kbd>W A S D</kbd> — translasi kotak (state-based, dibaca tiap frame)</div>
+              <div class="control-group">
+                <label>Kontrol</label>
+                <div class="hint">
+                  <div><kbd>↑ ↓ ← →</kbd> / <kbd>W A S D</kbd> — tahan untuk bergerak mulus; tiap event
+                    <code>keydown</code> menggeser target 16px, digambar dengan easing</div>
+                </div>
               </div>
-            </div>
 
-            <div class="control-group">
-              <label>State data (live)</label>
-              <div class="readout" id="p4-readout">// fokuskan canvas lalu tekan tombol</div>
+              <div class="control-group">
+                <label>Log event (live, 6 terakhir)</label>
+                <div class="readout" id="p4b-readout">// tahan tombol panah/WASD -- tidak perlu tap-tap</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 8. PIPELINE -->
-    <section class="block">
-      <div class="section-heading">
-        <span class="num">06</span>
-        <h2>Dari Primitif ke Graphics Pipeline</h2>
-      </div>
-      <p>
-        Setiap kali sebuah bentuk digambar di atas, browser sebenarnya melakukan tahapan yang
-        sama seperti graphics pipeline pada umumnya — hanya saja Canvas 2D API menyembunyikan
-        sebagian besar prosesnya di balik satu pemanggilan fungsi seperti
-        <code>fillRect()</code> atau <code>arc()</code>.
-      </p>
-      <div class="flow-box">
-        <div class="flow-step">Data (posisi, ukuran, warna)</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">Primitive Assembly</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">Rasterization</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">Fragment / Coloring</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">Frame Buffer → Layar</div>
-      </div>
-      <p style="margin-top:16px;">
-        Pada Pertemuan 2 (WebGL Fundamentals), tahapan yang sama akan dilakukan secara eksplisit
-        dan dipercepat oleh GPU: data vertex dikirim ke shader, dirasterisasi, lalu tiap fragment
-        diwarnai sebelum ditampilkan ke frame buffer.
-      </p>
-    </section>
+      <!-- 7. STATE-BASED: KEYBOARD TRANSLATION (Challenge D) -->
+      <section class="block">
+        <div class="section-heading">
+          <span class="num">05</span>
+          <h2>Interaksi State-Based: Keyboard Translation <span style="color:var(--text-faint); font-weight:400;">—
+              Challenge D</span></h2>
+        </div>
+        <p>
+          Pola <strong>state-based</strong>: <code>keydown</code>/<code>keyup</code> hanya
+          mengubah sebuah objek status <code>keys{}</code> (true/false). Pergerakan sebenarnya
+          dibaca dan diterapkan terus-menerus di dalam loop <code>requestAnimationFrame()</code>,
+          sehingga kotak tetap bergerak mulus selama tombol ditahan — bukan hanya sekali per event.
+        </p>
 
-    <div class="footer-note">
-      <span>Praktikum 1 · Graphics Playground</span>
-      <span>Canvas 2D API · Vanilla JavaScript</span>
-    </div>
-  </main>
-</div>
+        <div class="playground">
+          <div class="playground-header">
+            <div>
+              <h3>Keyboard Translation</h3>
+              <p class="desc">Klik canvas untuk fokus, lalu tahan panah / WASD. Canvas: 850×600.</p>
+            </div>
+          </div>
+          <div class="playground-body">
+            <div class="canvas-wrap">
+              <canvas id="canvas-keystate" width="850" height="600" tabindex="0"></canvas>
+              <div class="stat-row">
+                <span>Posisi: <b id="p4-pos">400, 250</b></span>
+                <span>Kecepatan: <b id="p4-speed">4 px/frame</b></span>
+              </div>
+            </div>
+            <div class="controls">
+              <div class="control-group">
+                <label>Status tombol (objek keys{} — live)</label>
+                <div class="key-grid">
+                  <div class="key-badge empty"></div>
+                  <div class="key-badge" data-key="up">↑ / W</div>
+                  <div class="key-badge empty"></div>
+                  <div class="key-badge" data-key="left">← / A</div>
+                  <div class="key-badge" data-key="down">↓ / S</div>
+                  <div class="key-badge" data-key="right">→ / D</div>
+                </div>
+              </div>
 
-<script src="js/nav.js"></script>
-<script src="js/praktikum1.js"></script>
+              <div class="control-group">
+                <div class="btn-row">
+                  <button class="btn" id="p4-reset">Reset Posisi</button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>Kontrol</label>
+                <div class="hint">
+                  <div><kbd>↑ ↓ ← →</kbd> / <kbd>W A S D</kbd> — translasi kotak (state-based, dibaca tiap frame)</div>
+                  <div style="margin-top:6px;"><kbd>Klik Canvas</kbd> — ganti warna player (event-based click:
+                    <code>colorIndex = (colorIndex + 1) % colors.length</code>)</div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>State data (live)</label>
+                <div class="readout" id="p4-readout">// fokuskan canvas lalu tekan tombol</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. PIPELINE -->
+      <section class="block">
+        <div class="section-heading">
+          <span class="num">06</span>
+          <h2>Dari Primitif ke Graphics Pipeline</h2>
+        </div>
+        <p>
+          Setiap kali sebuah bentuk digambar di atas, browser sebenarnya melakukan tahapan yang
+          sama seperti graphics pipeline pada umumnya — hanya saja Canvas 2D API menyembunyikan
+          sebagian besar prosesnya di balik satu pemanggilan fungsi seperti
+          <code>fillRect()</code> atau <code>arc()</code>.
+        </p>
+        <div class="flow-box">
+          <div class="flow-step">Data (posisi, ukuran, warna)</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Primitive Assembly</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Rasterization</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Fragment / Coloring</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Frame Buffer → Layar</div>
+        </div>
+      </section>
+
+      <div class="footer-note">
+        <span>Praktikum 1 · Graphics Playground</span>
+        <span>Canvas 2D API · Vanilla JavaScript</span>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/nav.js"></script>
+  <script src="js/praktikum1.js"></script>
 </body>
+
 </html>

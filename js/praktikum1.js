@@ -708,8 +708,17 @@
     if (!canvas) return;
     var ctx = canvas.getContext("2d");
 
+    var colors = [
+      "#9b59b6",
+      "#e74c3c",
+      "#2ecc71",
+      "#f1c40f",
+      "#3498db"
+    ];
+    var colorIndex = 0;
+
     var keys = { up: false, down: false, left: false, right: false }; // <- state
-    var player = { x: canvas.width / 2, y: canvas.height / 2, size: 30, speed: 4, color: "#5eead4" };
+    var player = { x: canvas.width / 2, y: canvas.height / 2, size: 30, speed: 4, color: colors[0] };
 
     var els = {
       pos: document.getElementById("p4-pos"),
@@ -717,6 +726,13 @@
       resetBtn: document.getElementById("p4-reset"),
       badges: document.querySelectorAll(".key-badge[data-key]"),
     };
+
+    // Fitur Interaksi Klik (BAGIAN H — Langkah 17 & Challenge C):
+    // Mengubah warna player secara berurutan ketika canvas diklik
+    canvas.addEventListener("click", function () {
+      colorIndex = (colorIndex + 1) % colors.length;
+      player.color = colors[colorIndex];
+    });
 
     function setKeyFromCode(code, value) {
       if (code === "ArrowUp" || code === "KeyW") keys.up = value;
@@ -783,6 +799,7 @@
         "keys.left: " + keys.left,
         "keys.right: " + keys.right,
         "player: (" + Math.round(player.x) + ", " + Math.round(player.y) + ")",
+        'player.color: "' + player.color + '" (klik canvas untuk ganti)',
       ].join("\n");
     }
 
