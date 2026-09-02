@@ -18,7 +18,7 @@
     <div class="brand">
       <div class="brand-mark"></div>
       <div class="brand-text">
-        <strong>Graphics Playground</strong>
+        <strong>Tim Murid Bapak</strong>
         <span>Praktikum Grafika Komputer</span>
       </div>
     </div>
@@ -36,30 +36,13 @@
           <span class="nav-badge live">Live</span>
         </a>
       </li>
-      <li>
-        <span class="nav-link disabled">
-          Praktikum 2 — WebGL Fundamentals
-          <span class="nav-badge soon">Segera</span>
-        </span>
-      </li>
-      <li>
-        <span class="nav-link disabled">
-          Praktikum 3
-          <span class="nav-badge soon">Segera</span>
-        </span>
-      </li>
+    
     </ul>
   </aside>
 
   <main class="main">
     <div class="eyebrow">Praktikum 1</div>
     <h1 class="page-title">Graphics Playground — Canvas 2D Dasar</h1>
-    <p class="lede">
-      Mini aplikasi untuk memahami dasar grafika komputer menggunakan HTML, JavaScript, dan
-      HTML Canvas 2D. Fokusnya bukan membangun aplikasi kompleks, melainkan memahami bahwa
-      gambar di layar dibentuk dari <strong>data</strong> — koordinat, ukuran, warna, dan bentuk
-      — yang kemudian diproses menjadi elemen visual.
-    </p>
 
     <!-- 1. DESKRIPSI -->
     <section class="block">
@@ -67,9 +50,8 @@
         <h2>Deskripsi Praktikum</h2>
       </div>
       <p>
-        Mahasiswa membuat beberapa primitif 2D, memberi warna, membuat satu objek bergerak, dan
-        menambahkan interaksi pengguna. Praktikum ini menjadi jembatan konseptual sebelum
-        mempelajari WebGL Fundamentals pada Pertemuan 2.
+        Membuat beberapa primitif 2D, memberi warna, membuat satu objek bergerak, dan
+        menambahkan interaksi pengguna.
       </p>
       <div class="flow-box">
         <div class="flow-step">Create Canvas</div>
@@ -84,35 +66,12 @@
       </div>
     </section>
 
-    <!-- 2. CAPAIAN -->
-    <section class="block">
-      <div class="section-heading">
-        <h2>Capaian Praktikum</h2>
-      </div>
-      <p>Setelah menyelesaikan praktikum ini, seluruh poin berikut sudah diimplementasikan pada playground di bawah:</p>
-      <ul class="objectives" id="objectives-list">
-        <li><span class="idx">01</span><span>Menjelaskan fungsi HTML Canvas sebagai area gambar.</span><span class="check">✓</span></li>
-        <li><span class="idx">02</span><span>Memahami koordinat 2D pada canvas.</span><span class="check">✓</span></li>
-        <li><span class="idx">03</span><span>Menggunakan data posisi, ukuran, dan warna untuk membentuk gambar.</span><span class="check">✓</span></li>
-        <li><span class="idx">04</span><span>Menggambar rectangle, line, circle, dan triangle.</span><span class="check">✓</span></li>
-        <li><span class="idx">05</span><span>Memahami hubungan primitive dengan representasi geometry.</span><span class="check">✓</span></li>
-        <li><span class="idx">06</span><span>Membuat animasi berbasis frame.</span><span class="check">✓</span></li>
-        <li><span class="idx">07</span><span>Menggunakan <code>requestAnimationFrame()</code> untuk memperbarui tampilan.</span><span class="check">✓</span></li>
-        <li><span class="idx">08</span><span>Menangani input mouse dan keyboard.</span><span class="check">✓</span></li>
-        <li><span class="idx">09</span><span>Membuat mini aplikasi grafika interaktif.</span><span class="check">✓</span></li>
-        <li><span class="idx">10</span><span>Menghubungkan hasil praktikum dengan konsep dasar graphics pipeline.</span><span class="check">✓</span></li>
-      </ul>
-    </section>
-
     <!-- 2b. KETENTUAN TUGAS UTAMA & CHALLENGE (rubrik detail) -->
     <section class="block">
       <div class="section-heading">
         <h2>Ketentuan Tugas Utama &amp; Challenge</h2>
       </div>
-      <p>
-        Rubrik detail "Interactive Graphics Playground" (syarat wajib 1–10 + minimal satu challenge)
-        dipetakan langsung ke playground di bawah:
-      </p>
+
       <ul class="objectives">
         <li><span class="idx">01</span><span>Canvas berukuran minimal 800×500.</span><span class="check">✓ semua canvas 850×600</span></li>
         <li><span class="idx">02</span><span>Minimal 3 jenis primitive berbeda.</span><span class="check">✓ rectangle, line, circle, triangle</span></li>
@@ -126,9 +85,14 @@
         <li><span class="idx">10</span><span>Berjalan langsung di browser tanpa build step.</span><span class="check">✓</span></li>
       </ul>
       <p style="margin-top:16px;">
-        <strong>Challenge yang dikerjakan:</strong> A — Bouncing Object, B — Follow Mouse,
-        C — Click to Change Color, D — Keyboard Movement (state-based), E — Mouse Coordinate.
-        Seluruh lima challenge diimplementasikan pada canvas terpisah — termasuk dua contoh
+        <br>
+        <strong>Challenge yang dikerjakan:</strong> <br>
+        <br>A = Bouncing Object,
+        <br>B = Follow Mouse,
+        <br>C = Click to Change Color, 
+        <br>D = Keyboard Movement (state-based), 
+        <br>E = Mouse Coordinate.<br>
+        <br>Seluruh lima challenge diimplementasikan pada canvas terpisah — termasuk dua contoh
         <strong>event-based</strong> (mouse pada Follow Mouse, keyboard pada Keyboard Step)
         yang sengaja dipisah dari canvas <strong>state-based</strong> (Keyboard Translation)
         supaya kedua paradigma input mudah dibandingkan langsung.
