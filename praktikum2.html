@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praktikum 2 — WebGL Fundamental</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body data-page="p2">
+
+  <div class="topbar">
+    <button class="menu-btn" data-menu-toggle aria-label="Buka menu"></button>
+    <div class="brand-text"><strong>Praktikum 2</strong></div>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div class="brand-text">
+          <strong>Tim Murid Bapak</strong>
+          <span>Praktikum Grafika Komputer</span>
+        </div>
+      </div>
+
+      <div class="nav-section-label">Menu</div>
+      <ul class="nav-list">
+        <li><a class="nav-link" data-page="home" href="index.html">Beranda</a></li>
+      </ul>
+
+      <div class="nav-section-label">Praktikum</div>
+      <ul class="nav-list">
+        <li>
+          <a class="nav-link" data-page="p1" href="praktikum1.html">
+            Praktikum 1 — Canvas 2D
+            <span class="nav-badge live">Live</span>
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" data-page="p2" href="praktikum2.html">
+            Praktikum 2 — WebGL
+            <span class="nav-badge live">Live</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="eyebrow">Praktikum 2</div>
+      <h1 class="page-title">WebGL Fundamental — Primitive Playground</h1>
+      <p class="lede">
+        Melanjutkan Praktikum 1: primitif yang sebelumnya digambar lewat Canvas 2D API sekarang
+        dibangun langsung dari <strong>buffer, attribute, dan shader</strong> lalu dirender oleh GPU
+        lewat WebGL2. Fokusnya memahami bagaimana data vertex (posisi + warna) mengalir dari
+        JavaScript ke vertex shader, dirasterisasi, lalu diwarnai oleh fragment shader.
+      </p>
+
+      <!-- 1. DESKRIPSI -->
+      <section class="block">
+        <div class="section-heading">
+          <h2>Deskripsi Praktikum</h2>
+        </div>
+        <p>
+          Membuat WebGL2 context, menyusun serta menghubungkan vertex &amp; fragment shader,
+          mengirim data posisi dan warna lewat buffer/attribute, lalu menggambar beberapa primitif
+          dengan draw mode berbeda. Objek dianimasikan dan direspons terhadap mouse serta keyboard,
+          persis seperti Praktikum 1 — hanya saja seluruh proses rasterisasi kini dilakukan oleh GPU,
+          bukan oleh Canvas 2D API.
+        </p>
+        <div class="flow-box">
+          <div class="flow-step">Create WebGL Context</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Compile &amp; Link Shader</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Setup Buffer &amp; Attribute</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Draw Primitive</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Animate &amp; Interact</div>
+        </div>
+      </section>
+
+      <!-- 2. CAPAIAN -->
+      <section class="block">
+        <div class="section-heading">
+          <h2>Capaian Praktikum</h2>
+        </div>
+        <p>Seluruh poin berikut sudah diimplementasikan pada WebGL Primitive Playground di bawah:</p>
+        <ul class="objectives">
+          <li><span class="idx">01</span><span>Menjelaskan fungsi WebGL2 context sebagai jalur akses ke GPU untuk rendering.</span><span class="check">✓</span></li>
+          <li><span class="idx">02</span><span>Memahami tahap shader pipeline: compile vertex &amp; fragment shader, lalu link menjadi program.</span><span class="check">✓</span></li>
+          <li><span class="idx">03</span><span>Menggunakan vertex buffer &amp; attribute untuk mengirim data posisi dan warna ke GPU.</span><span class="check">✓</span></li>
+          <li><span class="idx">04</span><span>Menggambar primitif triangle, rectangle (dua triangle), line-based shape, dan points.</span><span class="check">✓</span></li>
+          <li><span class="idx">05</span><span>Memahami efek draw mode (TRIANGLES, LINE_STRIP, POINTS) terhadap data vertex yang sama.</span><span class="check">✓</span></li>
+          <li><span class="idx">06</span><span>Menerapkan vertex color dengan interpolasi otomatis antar vertex oleh GPU.</span><span class="check">✓</span></li>
+          <li><span class="idx">07</span><span>Membuat animasi berbasis frame dengan <code>requestAnimationFrame()</code> dan dynamic buffer update.</span><span class="check">✓</span></li>
+          <li><span class="idx">08</span><span>Menangani input mouse (klik → NDC) dan keyboard (state-based &amp; event-based).</span><span class="check">✓</span></li>
+          <li><span class="idx">09</span><span>Membuat mini aplikasi WebGL interaktif lengkap dengan HUD real-time.</span><span class="check">✓</span></li>
+          <li><span class="idx">10</span><span>Menghubungkan proses ini dengan graphics pipeline GPU secara utuh.</span><span class="check">✓</span></li>
+        </ul>
+      </section>
+
+      <!-- 3. KETENTUAN & CHALLENGE -->
+      <section class="block">
+        <div class="section-heading">
+          <h2>Ketentuan Tugas &amp; Challenge</h2>
+        </div>
+        <p>Checklist teknis dan Challenge A–F dari modul Praktikum 2, dipetakan ke playground di bawah:</p>
+        <ul class="objectives">
+          <li><span class="idx">01</span><span>Minimal 3 jenis primitive.</span><span class="check">✓ triangle, rectangle, line-shape, points</span></li>
+          <li><span class="idx">02</span><span>Minimal 2 draw mode.</span><span class="check">✓ TRIANGLES, LINE_STRIP, POINTS</span></li>
+          <li><span class="idx">03</span><span>Vertex color dan interpolasi.</span><span class="check">✓ mode Random = warna acak per-vertex</span></li>
+          <li><span class="idx">04</span><span>Minimal 3 warna.</span><span class="check">✓ red, green, blue, cyan</span></li>
+          <li><span class="idx">05</span><span>Objek bergerak dan memantul.</span><span class="check">✓ 3 moving objects, batas NDC</span></li>
+          <li><span class="idx">06</span><span>Interaksi mouse &amp; keyboard.</span><span class="check">✓ klik spawn, WASD/Arrow, R/P/C</span></li>
+          <li><span class="idx">07</span><span>Rendering loop.</span><span class="check">✓ requestAnimationFrame()</span></li>
+          <li><span class="idx">08</span><span>Background non-default.</span><span class="check">✓ clear color biru gelap</span></li>
+          <li><span class="idx">09</span><span>Source terpisah HTML, JS, CSS.</span><span class="check">✓ praktikum2.html + js/praktikum2.js + css/style.css</span></li>
+          <li><span class="idx">10</span><span>Challenge A–F.</span><span class="check">✓ seluruhnya dikerjakan</span></li>
+        </ul>
+        <p style="margin-top:16px;">
+          <strong>Challenge yang dikerjakan:</strong><br>
+          A = Primitive selector, B = Color control (merah/hijau/biru/cyan/random),
+          C = Spawn primitive pada klik (pixel → NDC), D = Tiga moving objects yang memantul
+          pada batas NDC, E = Procedural grid pattern dari perulangan JavaScript,
+          F = HUD (FPS, jumlah primitive, draw mode aktif, mouse NDC).
+        </p>
+      </section>
+
+      <!-- 4. PLAYGROUND -->
+      <section class="block">
+        <div class="section-heading">
+          <span class="num">01</span>
+          <h2>WebGL Primitive Playground</h2>
+        </div>
+        <p>
+          Data vertex yang sama bisa dirender dengan cara berbeda hanya dengan mengganti parameter
+          <code>mode</code> pada <code>gl.drawArrays(mode, 0, count)</code> — coba ganti
+          <strong>Draw Mode</strong> tanpa mengubah <strong>Primitive Selector</strong> untuk
+          melihatnya langsung.
+        </p>
+
+        <div class="playground">
+          <div class="playground-header">
+            <div>
+              <h3>WebGL Primitive Playground</h3>
+              <p class="desc">Eksplorasi buffer, shader, attribute, draw mode, vertex color, dan interaksi. Canvas: 850×550.</p>
+            </div>
+            <span class="status-pill" id="p2-status-pill">Running · WebGL2</span>
+          </div>
+          <div class="playground-body">
+            <div class="canvas-wrap">
+              <canvas id="canvas-webgl" width="850" height="550" tabindex="0"></canvas>
+              <div class="hint" id="webgl2-fallback" hidden>
+                Browser ini tidak mendukung WebGL2, jadi playground tidak bisa dijalankan. Coba
+                buka dengan browser desktop modern (Chrome, Edge, atau Firefox versi terbaru).
+              </div>
+              <div class="stat-row">
+                <span>FPS: <b id="p2g-fps">0</b></span>
+                <span>Primitives: <b id="p2g-count">0</b></span>
+                <span>Draw mode: <b id="p2g-mode">TRIANGLES</b></span>
+                <span>Mouse NDC: <b id="p2g-ndc">-, -</b></span>
+              </div>
+            </div>
+            <div class="controls">
+              <div class="control-group">
+                <label>Primitive selector</label>
+                <select id="p2g-primitive">
+                  <option value="triangle" selected>Triangle</option>
+                  <option value="rectangle">Rectangle (2 triangle)</option>
+                  <option value="line">Line-based shape</option>
+                  <option value="points">Points</option>
+                </select>
+              </div>
+
+              <div class="control-group">
+                <label>Draw mode</label>
+                <select id="p2g-drawmode">
+                  <option value="TRIANGLES" selected>TRIANGLES</option>
+                  <option value="LINE_STRIP">LINE_STRIP</option>
+                  <option value="POINTS">POINTS</option>
+                </select>
+              </div>
+
+              <div class="control-group">
+                <label>Movement speed: <span id="p2g-speed-val">0.35</span></label>
+                <input type="range" id="p2g-speed" min="0" max="1" step="0.01" value="0.35" />
+              </div>
+
+              <div class="control-group">
+                <label>Color control (objek utama)</label>
+                <div class="btn-row" id="p2g-colors">
+                  <button class="btn color-swatch" data-color="red"><span class="dot" style="background:#f87171"></span>Red</button>
+                  <button class="btn color-swatch" data-color="green"><span class="dot" style="background:#4ade80"></span>Green</button>
+                  <button class="btn color-swatch" data-color="blue"><span class="dot" style="background:#60a5fa"></span>Blue</button>
+                  <button class="btn color-swatch" data-color="cyan"><span class="dot" style="background:#5eead4"></span>Cyan</button>
+                  <button class="btn color-swatch active" data-color="random"><span class="dot" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red)"></span>Random</button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="check-row"><input type="checkbox" id="p2g-grid" checked /> Procedural grid pattern</label>
+              </div>
+
+              <div class="control-group">
+                <div class="btn-row">
+                  <button class="btn primary" id="p2g-pause">Pause (P)</button>
+                  <button class="btn" id="p2g-reset">Reset (R)</button>
+                  <button class="btn" id="p2g-clear-spawned">Clear Spawned</button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>Kontrol</label>
+                <div class="hint">
+                  <div><kbd>↑ ↓ ← →</kbd> / <kbd>W A S D</kbd> — gerakkan objek utama (state-based, dibaca tiap frame)</div>
+                  <div style="margin-top:6px;"><kbd>Klik</kbd> canvas — spawn triangle baru di posisi klik (pixel → NDC)</div>
+                  <div style="margin-top:6px;"><kbd>C</kbd> — ganti warna objek utama (event-based, siklus warna)</div>
+                  <div style="margin-top:6px;"><kbd>R</kbd> / <kbd>P</kbd> — sama seperti tombol Reset / Pause</div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>Frame data (live)</label>
+                <div class="readout" id="p2g-readout">// klik canvas untuk fokus, lalu coba kontrolnya</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. PIPELINE -->
+      <section class="block">
+        <div class="section-heading">
+          <span class="num">02</span>
+          <h2>Dari Shader ke Graphics Pipeline</h2>
+        </div>
+        <p>
+          Di Praktikum 1, Canvas 2D API menyembunyikan seluruh pipeline di balik satu pemanggilan
+          seperti <code>fillRect()</code>. Di WebGL, tahapan itu ditulis eksplisit dan dijalankan
+          oleh GPU secara paralel:
+        </p>
+        <div class="flow-box">
+          <div class="flow-step">Vertex Buffer (posisi + warna)</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Vertex Shader</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Primitive Assembly</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Rasterization</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Fragment Shader</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Framebuffer → Layar</div>
+        </div>
+        <p style="margin-top:16px;">
+          Warna per-vertex yang terlihat halus/bergradasi pada mode <strong>Random</strong> bukan
+          dihitung manual di JavaScript — itu adalah hasil interpolasi otomatis antar vertex yang
+          dilakukan rasterizer GPU sebelum masuk ke fragment shader.
+        </p>
+      </section>
+
+      <div class="footer-note">
+        <span>Praktikum 2 · WebGL Fundamental</span>
+        <span>WebGL2 · GLSL ES 3.00 · Vanilla JavaScript</span>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/nav.js"></script>
+  <script src="js/praktikum2.js"></script>
+</body>
+
+</html>

@@ -465,6 +465,39 @@ input[type="range"] {
   accent-color: var(--accent);
 }
 
+select {
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 9px 10px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-family: var(--sans);
+  cursor: pointer;
+}
+select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.status-pill {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(94, 234, 212, 0.35);
+  color: var(--accent);
+  background: rgba(94, 234, 212, 0.08);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn.color-swatch { display: inline-flex; align-items: center; gap: 6px; }
+.btn.color-swatch .dot {
+  width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+}
+
 .readout {
   background: #0a0c12;
   border: 1px solid var(--border);
