@@ -1,6 +1,7 @@
 # Graphics Playground — Grafika Komputer
 
-Situs web interaktif untuk praktikum Grafika Komputer berbasis Canvas 2D dan JavaScript murni.
+Situs web interaktif untuk praktikum Grafika Komputer, mencakup Canvas 2D, WebGL2, dan
+transformasi matriks — dibangun dengan HTML, CSS, dan JavaScript murni.
 
 ## 🚀 Fitur Utama
 
@@ -96,3 +97,73 @@ Vertex Buffer -> Vertex Shader -> Primitive Assembly -> Rasterization
 Rendering dijalankan berulang menggunakan `requestAnimationFrame()`. Posisi dunia setiap objek
 dihitung ulang pada setiap frame, kemudian dikirim kembali ke GPU menggunakan
 `gl.bufferSubData()`.
+
+### 4. Praktikum 3 — Interactive Transformation Playground
+
+Praktikum 3 melanjutkan Praktikum 2 dengan fokus pada transformasi 2D: triangle yang sama kini
+dipindah, diputar, dan diskalakan murni lewat matriks 3×3, tanpa pernah mengubah vertex buffer.
+
+* **Geometry Buffer Bersama**
+  - Satu triangle geometry dipakai ulang oleh seluruh objek (Object A, Object B, child, dan orbiter).
+  - Yang membedakan posisi/rotasi/skala tiap objek hanya nilai uniform `u_matrix` yang dikirim
+    sebelum tiap `gl.drawArrays()`.
+
+* **Matrix Transformasi**
+  - Translation, rotation, uniform scaling, dan non-uniform scaling masing-masing dibangun sebagai
+    matriks 3×3, lalu digabung lewat matrix multiplication menjadi satu Model Matrix
+    (Translation × Rotation × Scaling).
+  - Posisi vertex dikonversi ke homogeneous coordinate `(x, y, 1)` sebelum dikalikan dengan Model
+    Matrix di vertex shader.
+
+* **Object A (Kontrol Keyboard)**
+  - Translasi dengan tombol panah, rotasi dengan `Q`/`E`, scaling uniform dengan `+`/`-`, scaling
+    non-uniform dengan `Z`/`X` (sumbu X) dan `C`/`V` (sumbu Y).
+  - Seluruh kontrol bersifat *state-based* dan memakai `deltaTime` supaya kecepatan gerak konsisten
+    di semua frame rate.
+
+* **Object B (Animasi Otomatis)**
+  - Berputar dan membesar-mengecil secara otomatis mengikuti gelombang sinus.
+  - Dapat dinonaktifkan lewat checkbox `Auto B`.
+
+* **Challenge A — Reset Transform**
+  - Tombol `Reset` / tombol `R` mengembalikan posisi, rotasi, dan skala Object A ke kondisi awal.
+
+* **Challenge B — Transform Preset**
+  - Tombol Preset 1/2/3 atau tombol `1`, `2`, `3` menerapkan tiga preset transformasi berbeda pada
+    Object A.
+
+* **Challenge C — Toggle Transform Order**
+  - Tombol `Toggle Order` / tombol `T` mengganti urutan perkalian matrix (`T × R × S` vs
+    `S × R × T`) dan menampilkan urutan aktif pada HUD.
+
+* **Challenge D — Mouse Translation**
+  - Klik pada canvas memindahkan Object A ke posisi tersebut; koordinat pixel dikonversi ke NDC
+    terlebih dahulu, sama seperti pada Praktikum 2.
+
+* **Challenge E — Parent & Child**
+  - Sebuah objek child memiliki transformasi lokal sendiri, lalu digabung dengan matrix Object B
+    (`childWorldMatrix = parentMatrix × childLocalMatrix`) sehingga ikut bergerak setiap kali
+    parent-nya bertransformasi.
+
+* **Challenge F — Simple Orbit**
+  - Sebuah objek mengorbit titik pusat (0,0) murni lewat komposisi matrix (rotasi + translasi
+    radius + skala), bukan simulasi fisika/kecepatan.
+
+* **Elemen Visual Bantu**
+  - World axes (sumbu X merah, sumbu Y hijau), marker origin, dan marker pivot tiap objek — semua
+    dapat ditampilkan/disembunyikan lewat checkbox.
+
+* **HUD Transform Real-time**
+  - Menampilkan posisi, rotasi, skala, urutan transform aktif, `deltaTime`, dan isi matriks
+    `u_matrix` (3×3) Object A secara live — berguna untuk debugging transformasi.
+
+Alur utama transformasi pada praktikum ini adalah:
+
+```text
+Local Coordinate (x, y, 1) -> Model Matrix (T x R x S) -> u_matrix (uniform)
+-> Clip Space / NDC -> Screen
+```
+
+Rendering dijalankan berulang menggunakan `requestAnimationFrame()`, dengan `deltaTime` dihitung
+setiap frame agar kecepatan translasi, rotasi, dan animasi otomatis tetap konsisten meskipun
+frame rate berubah-ubah.
