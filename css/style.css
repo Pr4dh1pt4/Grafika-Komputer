@@ -376,6 +376,11 @@ section.block {
     linear-gradient(var(--bg-alt), var(--bg-alt));
   border-right: 1px solid var(--border);
 }
+.canvas-wrap .hint,
+.canvas-wrap .readout {
+  align-self: stretch;
+  width: 100%;
+}
 
 canvas {
   background: #0a0c12;
