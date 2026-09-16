@@ -1,16 +1,4 @@
 // Praktikum 2 — WebGL Fundamental (app.js)
-//
-// Satu canvas WebGL2 (#canvas-webgl, 850x550) berisi:
-//   - 1 objek utama yang dikendalikan oleh Parameter Control panel
-//     (primitive selector, draw mode, color, WASD/Arrow -- state-based)
-//   - 3 "moving objects" otomatis yang memantul di batas NDC (-1..1)
-//   - triangle yang bisa di-spawn dengan klik mouse (pixel -> NDC)
-//   - grid prosedural (dibangun dari nested loop JS, bukan digambar manual)
-//
-// Semua objek primitif menyimpan vertex-nya di local space (berpusat di
-// 0,0). Posisi dunia dihitung ulang di JavaScript setiap frame lalu
-// di-upload ke GPU lewat gl.bufferSubData() -- inilah "dynamic position
-// buffer" yang dipakai untuk animasi, berbeda dari uniform transform.
 
 (function () {
   "use strict";

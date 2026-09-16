@@ -44,19 +44,19 @@
             <span class="nav-badge live">Live</span>
           </a>
         </li>
+        <li>
+          <a class="nav-link" data-page="p3" href="praktikum3.html">
+            Praktikum 3 — Transform
+            <span class="nav-badge live">Live</span>
+          </a>
+        </li>
       </ul>
     </aside>
 
     <main class="main">
       <div class="eyebrow">Praktikum 2</div>
       <h1 class="page-title">WebGL Fundamental — Primitive Playground</h1>
-      <p class="lede">
-        Melanjutkan Praktikum 1: primitif yang sebelumnya digambar lewat Canvas 2D API sekarang
-        dibangun langsung dari <strong>buffer, attribute, dan shader</strong> lalu dirender oleh GPU
-        lewat WebGL2. Fokusnya memahami bagaimana data vertex (posisi + warna) mengalir dari
-        JavaScript ke vertex shader, dirasterisasi, lalu diwarnai oleh fragment shader.
-      </p>
-
+      
       <!-- 1. DESKRIPSI -->
       <section class="block">
         <div class="section-heading">
@@ -66,7 +66,7 @@
           Membuat WebGL2 context, menyusun serta menghubungkan vertex &amp; fragment shader,
           mengirim data posisi dan warna lewat buffer/attribute, lalu menggambar beberapa primitif
           dengan draw mode berbeda. Objek dianimasikan dan direspons terhadap mouse serta keyboard,
-          persis seperti Praktikum 1 — hanya saja seluruh proses rasterisasi kini dilakukan oleh GPU,
+          persis seperti Praktikum 1 hanya seluruh proses rasterisasi kini dilakukan oleh GPU,
           bukan oleh Canvas 2D API.
         </p>
         <div class="flow-box">
@@ -82,27 +82,7 @@
         </div>
       </section>
 
-      <!-- 2. CAPAIAN -->
-      <section class="block">
-        <div class="section-heading">
-          <h2>Capaian Praktikum</h2>
-        </div>
-        <p>Seluruh poin berikut sudah diimplementasikan pada WebGL Primitive Playground di bawah:</p>
-        <ul class="objectives">
-          <li><span class="idx">01</span><span>Menjelaskan fungsi WebGL2 context sebagai jalur akses ke GPU untuk rendering.</span><span class="check">✓</span></li>
-          <li><span class="idx">02</span><span>Memahami tahap shader pipeline: compile vertex &amp; fragment shader, lalu link menjadi program.</span><span class="check">✓</span></li>
-          <li><span class="idx">03</span><span>Menggunakan vertex buffer &amp; attribute untuk mengirim data posisi dan warna ke GPU.</span><span class="check">✓</span></li>
-          <li><span class="idx">04</span><span>Menggambar primitif triangle, rectangle (dua triangle), line-based shape, dan points.</span><span class="check">✓</span></li>
-          <li><span class="idx">05</span><span>Memahami efek draw mode (TRIANGLES, LINE_STRIP, POINTS) terhadap data vertex yang sama.</span><span class="check">✓</span></li>
-          <li><span class="idx">06</span><span>Menerapkan vertex color dengan interpolasi otomatis antar vertex oleh GPU.</span><span class="check">✓</span></li>
-          <li><span class="idx">07</span><span>Membuat animasi berbasis frame dengan <code>requestAnimationFrame()</code> dan dynamic buffer update.</span><span class="check">✓</span></li>
-          <li><span class="idx">08</span><span>Menangani input mouse (klik → NDC) dan keyboard (state-based &amp; event-based).</span><span class="check">✓</span></li>
-          <li><span class="idx">09</span><span>Membuat mini aplikasi WebGL interaktif lengkap dengan HUD real-time.</span><span class="check">✓</span></li>
-          <li><span class="idx">10</span><span>Menghubungkan proses ini dengan graphics pipeline GPU secara utuh.</span><span class="check">✓</span></li>
-        </ul>
-      </section>
-
-      <!-- 3. KETENTUAN & CHALLENGE -->
+      <!-- 2. KETENTUAN & CHALLENGE -->
       <section class="block">
         <div class="section-heading">
           <h2>Ketentuan Tugas &amp; Challenge</h2>
@@ -129,7 +109,7 @@
         </p>
       </section>
 
-      <!-- 4. PLAYGROUND -->
+      <!-- 3. PLAYGROUND -->
       <section class="block">
         <div class="section-heading">
           <span class="num">01</span>
@@ -231,7 +211,7 @@
         </div>
       </section>
 
-      <!-- 5. PIPELINE -->
+      <!-- 4. PIPELINE -->
       <section class="block">
         <div class="section-heading">
           <span class="num">02</span>
