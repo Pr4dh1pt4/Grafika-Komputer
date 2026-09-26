@@ -150,29 +150,6 @@
         </div>
       </section>
 
-      <section class="block">
-        <div class="section-heading"><span class="num">03</span><h2>Eksperimen &amp; Debugging</h2></div>
-        <ol>
-          <li>Bandingkan kamera awal dengan kamera yang digeser pada X/Y, lalu ubah target dan amati arah pandang.</li>
-          <li>Bandingkan Perspective/Orthographic serta FOV 35°, 60°, dan 90°.</li>
-          <li>Tekan <kbd>N</kbd> untuk menguji clipping near/far, lalu tekan <kbd>D</kbd> untuk membandingkan depth test.</li>
-          <li>Aktifkan Orbit dan ubah tinggi kamera dengan <kbd>Page Up</kbd>/<kbd>Page Down</kbd>.</li>
-        </ol>
-        <p>Jika cube tidak muncul, periksa compile/link shader, posisi kamera terhadap target, nilai near/far, aspect ratio, viewport, dan draw count (36). Jika sisi belakang menimpa sisi depan, pastikan depth test aktif dan color serta depth buffer dibersihkan setiap frame.</p>
-      </section>
-
-      <section class="block">
-        <div class="section-heading"><span class="num">04</span><h2>Pertanyaan Pemahaman</h2></div>
-        <ol>
-          <li>Apa fungsi camera position, target, dan up vector dalam membentuk View Matrix?</li>
-          <li>Mengapa View Matrix dapat dipahami sebagai inverse transformasi kamera?</li>
-          <li>Apa perbedaan Perspective dan Orthographic Projection, termasuk pengaruh FOV?</li>
-          <li>Mengapa aspect ratio harus mengikuti ukuran viewport?</li>
-          <li>Apa fungsi near/far plane, depth buffer, dan depth test?</li>
-          <li>Jelaskan alur <code>P × V × M × localPosition</code> hingga vertex tampil di layar.</li>
-        </ol>
-      </section>
-
       <div class="footer-note"><span>Praktikum 4 · Camera, Projection &amp; 3D</span><span>WebGL2 · GLSL ES 3.00 · Matrix 4×4 · Vanilla JavaScript</span></div>
     </main>
   </div>
