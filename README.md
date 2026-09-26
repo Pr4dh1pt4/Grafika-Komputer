@@ -167,3 +167,35 @@ Local Coordinate (x, y, 1) -> Model Matrix (T x R x S) -> u_matrix (uniform)
 Rendering dijalankan berulang menggunakan `requestAnimationFrame()`, dengan `deltaTime` dihitung
 setiap frame agar kecepatan translasi, rotasi, dan animasi otomatis tetap konsisten meskipun
 frame rate berubah-ubah.
+
+### 5. Praktikum 4 — Camera, Projection & 3D
+
+Praktikum 4 melanjutkan transformasi 2D menuju pipeline 3D menggunakan cube WebGL2 dengan 36
+vertex, warna per sisi, serta matrix 4×4 untuk Model, View, dan Projection.
+
+* **Camera dan View Matrix**
+  - Kamera menggunakan position, target, dan up vector melalui helper `Mat4.lookAt()`.
+  - Tombol panah mengubah posisi X/Y, `W`/`S` mengubah Z, sedangkan `Page Up`/`Page Down`
+    mengontrol tinggi kamera (Challenge B).
+  - Checkbox Orbit mengaktifkan kamera yang bergerak melingkar mengitari target (Challenge A).
+
+* **Projection dan Clipping**
+  - Pilih Perspective atau Orthographic. FOV Perspective dapat diatur dari 30° sampai 100°.
+  - Tombol `N` mengganti preset near/far: `0.1 / 100`, `1 / 20`, dan `2.5 / 8`.
+  - Aspect ratio dihitung dari ukuran canvas setiap frame.
+
+* **Depth, Animasi, dan HUD**
+  - Depth Test dapat diaktifkan/dimatikan; color dan depth buffer dibersihkan pada setiap frame.
+  - Cube berotasi otomatis, dengan kontrol untuk menghentikan rotasi.
+  - HUD menampilkan projection, posisi camera, FOV, near/far, depth state, FPS, dan View Matrix.
+
+Kontrol keyboard: panah untuk kamera X/Y, `W`/`S` untuk Z, `Page Up`/`Page Down` untuk tinggi,
+`P` untuk projection, `[`/`]` untuk FOV, `N` untuk near/far, `D` untuk depth test, dan `R` untuk
+reset. Jalankan situs melalui local development server, lalu buka `praktikum4.html`.
+
+Alur pipeline:
+
+```text
+Local Position -> Model Matrix -> World -> View Matrix -> View
+-> Projection Matrix -> Clip -> Perspective Divide -> NDC -> Screen
+```

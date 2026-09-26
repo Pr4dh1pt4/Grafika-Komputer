@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praktikum 4 — Camera, Projection &amp; 3D</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .p4-canvas-wrap { min-width: 0; }
+    #canvas-camera { width: 100%; height: auto; display: block; cursor: default; }
+    .p4-status { color: var(--ok); }
+    .p4-hud { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 14px; width: 100%; }
+    .p4-hud span { color: var(--text-faint); }
+    .p4-hud b { color: var(--text); font-family: var(--mono); font-size: 12px; font-weight: 500; }
+    .p4-controls { flex-basis: 300px; }
+    .p4-control-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .p4-control-row output { color: var(--accent); font: 12px var(--mono); }
+    .p4-controls input[type="range"] { width: 100%; accent-color: var(--accent); }
+    .p4-controls select { width: 100%; }
+    .p4-matrix { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; }
+    .p4-experiments { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; }
+    .p4-experiments h3 { font-size: 14px; margin-bottom: 5px; }
+    .p4-experiments p { margin-bottom: 0; font-size: 13px; }
+    @media (max-width: 720px) {
+      .p4-hud, .p4-experiments { grid-template-columns: 1fr; }
+      .p4-controls { flex-basis: 100%; }
+    }
+  </style>
+</head>
+
+<body data-page="p4">
+  <div class="topbar">
+    <button class="menu-btn" data-menu-toggle aria-label="Buka menu"></button>
+    <div class="brand-text"><strong>Praktikum 4</strong></div>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div class="brand-text"><strong>Tim Murid Bapak</strong><span>Praktikum Grafika Komputer</span></div>
+      </div>
+      <div class="nav-section-label">Menu</div>
+      <ul class="nav-list"><li><a class="nav-link" data-page="home" href="index.html">Beranda</a></li></ul>
+      <div class="nav-section-label">Praktikum</div>
+      <ul class="nav-list">
+        <li><a class="nav-link" data-page="p1" href="praktikum1.html">Praktikum 1 — Canvas 2D <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p2" href="praktikum2.html">Praktikum 2 — WebGL <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p3" href="praktikum3.html">Praktikum 3 — Transform <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p4" href="praktikum4.html">Praktikum 4 — Camera <span class="nav-badge live">Live</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="eyebrow">EF234504 · Pertemuan 4 · Dr. Darlis Herumurti</div>
+      <h1 class="page-title">Camera, Projection &amp; 3D</h1>
+      <p class="lede">Lanjutkan pipeline transformasi dari world space ke layar. Ubah kamera, proyeksi, dan depth test sambil mengamati cube WebGL2 secara langsung.</p>
+
+      <section class="block">
+        <div class="section-heading"><h2>Deskripsi Praktikum</h2></div>
+        <p>Praktikum ini membangun visualisasi <strong>Rotating 3D Cube Camera Playground</strong>. Vertex lokal 3D melewati Model Matrix, View Matrix, dan Projection Matrix sebelum perspektive divide dan viewport mengubahnya menjadi pixel. Seluruh transformasi dikirim sebagai matrix 4×4 ke vertex shader.</p>
+        <div class="flow-box">
+          <div class="flow-step">Local Vertex</div><div class="flow-arrow">→</div>
+          <div class="flow-step">Model · World</div><div class="flow-arrow">→</div>
+          <div class="flow-step">View · Camera</div><div class="flow-arrow">→</div>
+          <div class="flow-step">Projection · Clip</div><div class="flow-arrow">→</div>
+          <div class="flow-step">NDC → Screen</div>
+        </div>
+        <p style="margin-top:16px;"><code>clipPosition = Projection × View × Model × vec4(localPosition, 1)</code>. Depth buffer menyimpan kedalaman fragment agar permukaan yang lebih dekat menutupi permukaan di belakangnya.</p>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><h2>Capaian &amp; Ketentuan</h2></div>
+        <p>Playground mengimplementasikan pipeline dan kontrol utama modul Pertemuan 4. Gunakan checklist ini saat menguji aplikasi.</p>
+        <ul class="objectives">
+          <li><span class="idx">01</span><span>WebGL2, cube dari 36 vertex, position <code>vec3</code>, dan warna berbeda pada tiap sisi.</span><span class="check">✓</span></li>
+          <li><span class="idx">02</span><span>Model, View/lookAt, perspective, dan orthographic matrix 4×4.</span><span class="check">✓</span></li>
+          <li><span class="idx">03</span><span>Aspect ratio, FOV 30°–100°, serta preset near/far yang valid.</span><span class="check">✓</span></li>
+          <li><span class="idx">04</span><span>Depth test dapat dimatikan, depth buffer dibersihkan setiap frame.</span><span class="check">✓</span></li>
+          <li><span class="idx">05</span><span>Rotasi otomatis, gerak kamera state-based, toggle event-based, dan HUD.</span><span class="check">✓</span></li>
+          <li><span class="idx">06</span><span>Challenge A: orbit camera. Challenge B: kontrol ketinggian kamera.</span><span class="check">✓</span></li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">01</span><h2>Rotating 3D Cube Camera Playground</h2></div>
+        <p>Gerakkan kamera dengan tombol panah dan <kbd>W</kbd>/<kbd>S</kbd>. Tombol <kbd>Page Up</kbd>/<kbd>Page Down</kbd> mengubah tinggi kamera (Challenge B); aktifkan Orbit untuk Challenge A.</p>
+        <div class="playground">
+          <div class="playground-header">
+            <div><h3>Camera Playground</h3><p class="desc">WebGL2 · cube 36 vertex · Model / View / Projection</p></div>
+            <span class="status-pill p4-status" id="p4-status">Menyiapkan WebGL2</span>
+          </div>
+          <div class="playground-body">
+            <div class="canvas-wrap p4-canvas-wrap">
+              <canvas id="canvas-camera" width="900" height="560" tabindex="0" aria-label="Visualisasi cube 3D"></canvas>
+              <div class="hint" id="p4-fallback" hidden></div>
+              <div class="stat-row p4-hud">
+                <span>Projection <b id="p4-projection">Perspective</b></span>
+                <span>Camera <b id="p4-camera">(0.00, 1.50, 4.00)</b></span>
+                <span>FOV <b id="p4-fov">60°</b></span>
+                <span>Near / Far <b id="p4-clip">0.1 / 100</b></span>
+                <span>Depth test <b id="p4-depth">ON</b></span>
+                <span>FPS <b id="p4-fps">0</b></span>
+              </div>
+              <div class="hint"><div><kbd>← →</kbd> kamera X · <kbd>↑ ↓</kbd> kamera Y · <kbd>W S</kbd> kamera Z</div><div style="margin-top:6px;"><kbd>[ ]</kbd> FOV · <kbd>P</kbd> projection · <kbd>N</kbd> near/far · <kbd>D</kbd> depth · <kbd>R</kbd> reset</div><div style="margin-top:6px;"><kbd>Page Up</kbd>/<kbd>Page Down</kbd> tinggi kamera</div></div>
+            </div>
+            <div class="controls p4-controls">
+              <div class="control-group">
+                <label>Projection</label>
+                <select id="p4-mode" aria-label="Pilih projection">
+                  <option value="perspective">Perspective</option>
+                  <option value="orthographic">Orthographic</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <div class="p4-control-row"><label for="p4-fov-range">Field of View</label><output id="p4-fov-output">60°</output></div>
+                <input id="p4-fov-range" type="range" min="30" max="100" step="1" value="60" />
+              </div>
+              <div class="control-group">
+                <label>Near / Far preset</label>
+                <div class="btn-row"><button class="btn" id="p4-clip-next" type="button">Preset berikutnya (N)</button></div>
+              </div>
+              <div class="control-group">
+                <label>Scene</label>
+                <label class="check-row"><input id="p4-depth-toggle" type="checkbox" checked /> Depth Test</label>
+                <label class="check-row"><input id="p4-rotation-toggle" type="checkbox" checked /> Rotasi otomatis</label>
+                <label class="check-row"><input id="p4-orbit-toggle" type="checkbox" /> Orbit camera · Challenge A</label>
+              </div>
+              <div class="control-group">
+                <label>Aksi</label>
+                <div class="btn-row"><button class="btn primary" id="p4-reset" type="button">Reset scene (R)</button></div>
+              </div>
+              <div class="control-group">
+                <label>View Matrix · column-major</label>
+                <div class="readout p4-matrix" id="p4-matrix">Menunggu frame pertama...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">02</span><h2>Konsep yang Diamati</h2></div>
+        <div class="p4-experiments">
+          <div><h3>View Matrix dan basis kamera</h3><p><code>forward = normalize(target − position)</code>. Right dan corrected up melengkapi orientasi kamera. Kamera bergerak ke kanan membuat dunia tampak bergeser ke kiri.</p></div>
+          <div><h3>Perspective vs orthographic</h3><p>Perspective memakai FOV dan membuat objek jauh tampak lebih kecil. Orthographic memproyeksikan volume kotak sehingga ukuran tampak relatif stabil terhadap depth.</p></div>
+          <div><h3>FOV dan aspect ratio</h3><p>FOV kecil terasa zoom; FOV besar memperlebar pandangan. Projection memakai rasio <code>canvas.width / canvas.height</code> agar objek tidak terdistorsi.</p></div>
+          <div><h3>Near/far dan depth test</h3><p>Near harus lebih besar dari nol dan far harus lebih besar dari near. Rentang terlalu ekstrem mengurangi presisi depth; matikan Depth Test untuk membandingkan hasil berdasarkan draw order.</p></div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">03</span><h2>Eksperimen &amp; Debugging</h2></div>
+        <ol>
+          <li>Bandingkan kamera awal dengan kamera yang digeser pada X/Y, lalu ubah target dan amati arah pandang.</li>
+          <li>Bandingkan Perspective/Orthographic serta FOV 35°, 60°, dan 90°.</li>
+          <li>Tekan <kbd>N</kbd> untuk menguji clipping near/far, lalu tekan <kbd>D</kbd> untuk membandingkan depth test.</li>
+          <li>Aktifkan Orbit dan ubah tinggi kamera dengan <kbd>Page Up</kbd>/<kbd>Page Down</kbd>.</li>
+        </ol>
+        <p>Jika cube tidak muncul, periksa compile/link shader, posisi kamera terhadap target, nilai near/far, aspect ratio, viewport, dan draw count (36). Jika sisi belakang menimpa sisi depan, pastikan depth test aktif dan color serta depth buffer dibersihkan setiap frame.</p>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">04</span><h2>Pertanyaan Pemahaman</h2></div>
+        <ol>
+          <li>Apa fungsi camera position, target, dan up vector dalam membentuk View Matrix?</li>
+          <li>Mengapa View Matrix dapat dipahami sebagai inverse transformasi kamera?</li>
+          <li>Apa perbedaan Perspective dan Orthographic Projection, termasuk pengaruh FOV?</li>
+          <li>Mengapa aspect ratio harus mengikuti ukuran viewport?</li>
+          <li>Apa fungsi near/far plane, depth buffer, dan depth test?</li>
+          <li>Jelaskan alur <code>P × V × M × localPosition</code> hingga vertex tampil di layar.</li>
+        </ol>
+      </section>
+
+      <div class="footer-note"><span>Praktikum 4 · Camera, Projection &amp; 3D</span><span>WebGL2 · GLSL ES 3.00 · Matrix 4×4 · Vanilla JavaScript</span></div>
+    </main>
+  </div>
+
+  <script src="js/nav.js"></script>
+  <script type="module" src="js/praktikum4.js"></script>
+</body>
+</html>
