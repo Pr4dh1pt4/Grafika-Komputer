@@ -127,6 +127,7 @@ void main() {
       depthInfo: document.getElementById("p4-depth"),
       fpsInfo: document.getElementById("p4-fps"),
       matrix: document.getElementById("p4-matrix"),
+      badges: document.querySelectorAll(".key-badge[data-key]"),
     };
 
     function changeClipPreset() {
@@ -212,6 +213,10 @@ void main() {
       elements.depthInfo.textContent = elements.depth.checked ? "ON" : "OFF";
       elements.fpsInfo.textContent = String(fps);
       elements.matrix.textContent = Array.from(view, (value) => value.toFixed(2)).join("  ");
+      elements.badges.forEach((badge) => {
+        const active = badge.dataset.key.split(" ").some((key) => keys.has(key));
+        badge.classList.toggle("active", active);
+      });
     }
 
     function render(time) {
