@@ -199,3 +199,40 @@ Alur pipeline:
 Local Position -> Model Matrix -> World -> View Matrix -> View
 -> Projection Matrix -> Clip -> Perspective Divide -> NDC -> Screen
 ```
+
+### 6. Praktikum 5 — Textured and Lit Object Playground
+
+Praktikum 5 melanjutkan pipeline 3D dengan geometri ber-UV, pencahayaan per-fragment,
+tekstur yang dapat dikonfigurasi, serta kontrol kamera dan point light. Buka `praktikum5.html`
+melalui local server agar modul ES dan image texture SVG dimuat pada origin yang sama.
+
+* **Geometri dan normal**
+  - Kubus, torus, torus knot, dan bola dibuat langsung dengan JavaScript, tanpa library tambahan.
+  - Setiap mesh memiliki position, face normal, smooth vertex normal, UV, dan color. VAO flat/smooth
+    dibangun sekali dan dipakai ulang saat bentuk atau mode shading diganti.
+  - Normal ditransformasi dengan inverse-transpose dari bagian 3×3 Model Matrix dan dinormalisasi
+    lagi pada fragment shader.
+
+* **Lighting**
+  - Fragment shader menghitung ambient, diffuse Lambert, dan specular Blinn-Phong dengan point light.
+  - Slider mengubah ambient strength, shininess, posisi lampu, serta non-uniform scale.
+  - Ambient, diffuse, dan specular dapat diaktifkan secara terpisah.
+  - Persamaan per-fragment: `ambient = k_a × lightColor`, `diffuse = max(dot(N, L), 0) × lightColor`,
+    `specular = pow(max(dot(N, H), 0), shininess) × lightColor`, lalu
+    `final = textureColor × (ambient + diffuse) + specular`.
+
+* **Texture**
+  - Checkerboard dibuat melalui Canvas API; image texture berasal dari `texture.svg`.
+  - Filtering menyediakan NEAREST, LINEAR, dan LINEAR dengan mipmap. Wrapping mendukung REPEAT
+    serta CLAMP_TO_EDGE; UV mesh sengaja melampaui rentang 0–1 agar wrapping dapat diamati.
+
+* **Bentuk, kamera, dan animasi**
+  - Bentuk melengkung otomatis memilih smooth normal; kubus otomatis memakai flat normal. Tombol F
+    tetap dapat menukar mode secara manual.
+  - Object rotation dapat dihentikan/dilanjutkan dengan P tanpa menjeda camera orbit atau light orbit.
+    Camera orbit dan light orbit memiliki state dan timer masing-masing.
+  - Panah menggerakkan lampu pada X/Y, W/S mengubah Z lampu, Q/E mengubah azimuth kamera, T
+    mengaktifkan texture, L mengaktifkan orbit lampu, dan R mereset seluruh scene.
+
+HUD menampilkan bentuk, shading, posisi light, sumber texture, filtering, wrapping, mode normal,
+dan FPS. Belum ada perhitungan bayangan antarpermukaan (self-shadow).
