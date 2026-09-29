@@ -18,6 +18,7 @@
     .p4-control-row output { color: var(--accent); font: 12px var(--mono); }
     .p4-controls input[type="range"] { width: 100%; accent-color: var(--accent); }
     .p4-controls select { width: 100%; }
+    .p4-toggle-keys { grid-template-columns: repeat(4, 1fr); margin-top: 6px; }
     .p4-matrix { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; }
     .p4-experiments { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; }
     .p4-experiments h3 { font-size: 14px; margin-bottom: 5px; }
@@ -131,6 +132,29 @@
               <div class="control-group">
                 <label>Aksi</label>
                 <div class="btn-row"><button class="btn primary" id="p4-reset" type="button">Reset scene (R)</button></div>
+              </div>
+              <div class="control-group">
+                <label>Status tombol (Set keys — live)</label>
+                <div class="key-grid">
+                  <div class="key-badge empty"></div>
+                  <div class="key-badge" data-key="arrowup">↑</div>
+                  <div class="key-badge empty"></div>
+                  <div class="key-badge" data-key="arrowleft">←</div>
+                  <div class="key-badge" data-key="arrowdown">↓</div>
+                  <div class="key-badge" data-key="arrowright">→</div>
+                  <div class="key-badge" data-key="w">W</div>
+                  <div class="key-badge" data-key="s">S</div>
+                  <div class="key-badge" data-key="pageup">PgUp</div>
+                  <div class="key-badge" data-key="[ {">[ FOV−</div>
+                  <div class="key-badge" data-key="] }">] FOV+</div>
+                  <div class="key-badge" data-key="pagedown">PgDn</div>
+                </div>
+                <div class="key-grid p4-toggle-keys">
+                  <div class="key-badge" data-key="p">P</div>
+                  <div class="key-badge" data-key="n">N</div>
+                  <div class="key-badge" data-key="d">D</div>
+                  <div class="key-badge" data-key="r">R</div>
+                </div>
               </div>
               <div class="control-group">
                 <label>View Matrix · column-major</label>
