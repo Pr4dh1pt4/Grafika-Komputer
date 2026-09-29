@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praktikum 5 — Textured and Lit Object Playground</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="p5">
+  <div class="topbar">
+    <button class="menu-btn" data-menu-toggle aria-label="Buka menu"></button>
+    <div class="brand-text"><strong>Praktikum 5</strong></div>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark"></div><div class="brand-text"><strong>Tim Murid Bapak</strong><span>Praktikum Grafika Komputer</span></div></div>
+      <div class="nav-section-label">Menu</div>
+      <ul class="nav-list"><li><a class="nav-link" data-page="home" href="index.html">Beranda</a></li></ul>
+      <div class="nav-section-label">Praktikum</div>
+      <ul class="nav-list">
+        <li><a class="nav-link" data-page="p1" href="praktikum1.html">Praktikum 1 — Canvas 2D <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p2" href="praktikum2.html">Praktikum 2 — WebGL <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p3" href="praktikum3.html">Praktikum 3 — Transform <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p4" href="praktikum4.html">Praktikum 4 — Camera <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p5" href="praktikum5.html">Praktikum 5 — Lighting &amp; Texture <span class="nav-badge live">Live</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="eyebrow">EF234504 · Pertemuan 5 · Dr. Darlis Herumurti</div>
+      <h1 class="page-title">Textured and Lit Object Playground</h1>
+      <p class="lede">Amati bagaimana normal, tekstur, dan tiga komponen pencahayaan membentuk tampilan objek 3D. Seluruh geometri dirender langsung dengan WebGL2.</p>
+
+      <section class="block">
+        <div class="section-heading"><h2>Deskripsi Praktikum</h2></div>
+        <p>Praktikum ini melanjutkan pipeline kamera dan transformasi dari tugas sebelumnya. Posisi, normal, UV, dan warna permukaan diproses oleh vertex shader; fragment shader menormalisasi normal hasil interpolasi, mengambil sampel tekstur, lalu menghitung ambient, diffuse, dan specular.</p>
+        <div class="flow-box"><div class="flow-step">Position · Normal · UV</div><div class="flow-arrow">→</div><div class="flow-step">Model · Normal Matrix</div><div class="flow-arrow">→</div><div class="flow-step">View · Projection</div><div class="flow-arrow">→</div><div class="flow-step">Texture · Lighting</div><div class="flow-arrow">→</div><div class="flow-step">Fragment</div></div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><h2>Capaian &amp; Challenge A–G</h2></div>
+        <ul class="objectives">
+          <li><span class="idx">01</span><span>Geometri dengan position, normal, UV, dan color untuk setiap permukaan.</span><span class="check">✓</span></li>
+          <li><span class="idx">02</span><span>Flat/smooth shading, normalisasi fragment, dan normal matrix inverse-transpose.</span><span class="check">✓</span></li>
+          <li><span class="idx">03</span><span>Point light dengan ambient, diffuse, specular, shininess, dan kontrol posisi.</span><span class="check">✓</span></li>
+          <li><span class="idx">04</span><span>Challenge A: image texture SVG dan checkerboard procedural.</span><span class="check">✓</span></li>
+          <li><span class="idx">05</span><span>Texture filtering NEAREST/LINEAR/mipmap dan wrapping REPEAT/CLAMP_TO_EDGE.</span><span class="check">✓</span></li>
+          <li><span class="idx">06</span><span>Rotasi objek, input state-based, non-uniform scale, serta orbit kamera dan lampu.</span><span class="check">✓</span></li>
+          <li><span class="idx">07</span><span>Kubus, torus, torus knot, dan bola dengan buffer geometri yang dipakai ulang.</span><span class="check">✓</span></li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">01</span><h2>Lighting &amp; Texture Playground</h2></div>
+        <div class="playground p5-playground">
+          <div class="playground-header"><div><h3>Object Playground</h3><p class="desc">WebGL2 · normal matrix · point light · texture sampler</p></div><span class="status-pill" id="p5-status">Menyiapkan WebGL2</span></div>
+          <div class="playground-body">
+            <div class="canvas-wrap p5-canvas-wrap">
+              <canvas id="p5-canvas" width="900" height="560" tabindex="0" aria-label="Objek 3D dengan tekstur dan pencahayaan"></canvas>
+              <div class="hint" id="p5-fallback" hidden></div>
+              <div class="stat-row p5-hud">
+                <span>Bentuk <b id="p5-hud-shape">Kubus</b></span><span>Shading <b id="p5-hud-shading">Flat</b></span>
+                <span>Light <b id="p5-hud-light">(2.50, 2.00, 3.00)</b></span><span>Texture <b id="p5-hud-texture">Checkerboard</b></span>
+                <span>Filter <b id="p5-hud-filter">LINEAR</b></span><span>Wrap <b id="p5-hud-wrap">REPEAT</b></span>
+                <span>Normal <b id="p5-hud-normal">Face</b></span><span>FPS <b id="p5-hud-fps">0</b></span>
+              </div>
+              <div class="hint"><kbd>← →</kbd> light X · <kbd>↑ ↓</kbd> light Y · <kbd>W S</kbd> light Z · <kbd>Q E</kbd> camera X · <kbd>P</kbd> rotasi · <kbd>F</kbd> normal · <kbd>T</kbd> texture · <kbd>L</kbd> orbit lampu · <kbd>R</kbd> reset</div>
+            </div>
+            <div class="controls p5-controls">
+              <div class="control-group"><label for="p5-shape">Bentuk objek</label><select id="p5-shape"><option value="cube">Kubus</option><option value="torus">Torus</option><option value="knot">Torus Knot</option><option value="sphere">Bola</option></select></div>
+              <div class="control-group"><label>Normal</label><div class="btn-row"><button class="btn active" id="p5-shading" type="button">Flat</button><label class="check-row"><input id="p5-texture-toggle" type="checkbox" checked /> Texture aktif</label></div></div>
+              <div class="control-group"><label for="p5-texture-source">Texture source</label><select id="p5-texture-source"><option value="checker">Checkerboard procedural</option><option value="image">Image texture SVG</option></select></div>
+              <div class="control-group"><label for="p5-filter">Filtering</label><select id="p5-filter"><option value="nearest">NEAREST</option><option value="linear" selected>LINEAR</option><option value="mipmap">LINEAR + mipmap</option></select></div>
+              <div class="control-group"><label for="p5-wrap">Wrapping</label><select id="p5-wrap"><option value="repeat" selected>REPEAT</option><option value="clamp">CLAMP_TO_EDGE</option></select></div>
+              <div class="control-group"><label>Ambient <output id="p5-ambient-value">0.20</output></label><input id="p5-ambient" type="range" min="0" max="0.8" step="0.01" value="0.2" /></div>
+              <div class="control-group"><label>Shininess <output id="p5-shininess-value">32</output></label><input id="p5-shininess" type="range" min="4" max="128" step="1" value="32" /></div>
+              <div class="control-group"><label>Posisi point light</label><div class="p5-axis"><span>X</span><input id="p5-light-x" type="range" min="-4" max="4" step="0.1" value="2.5" /><output id="p5-light-x-value">2.5</output></div><div class="p5-axis"><span>Y</span><input id="p5-light-y" type="range" min="-4" max="4" step="0.1" value="2" /><output id="p5-light-y-value">2.0</output></div><div class="p5-axis"><span>Z</span><input id="p5-light-z" type="range" min="-4" max="4" step="0.1" value="3" /><output id="p5-light-z-value">3.0</output></div></div>
+              <div class="control-group"><label>Non-uniform scale</label><div class="p5-axis"><span>X</span><input id="p5-scale-x" type="range" min="0.5" max="1.8" step="0.05" value="1" /><output id="p5-scale-x-value">1.00</output></div><div class="p5-axis"><span>Y</span><input id="p5-scale-y" type="range" min="0.5" max="1.8" step="0.05" value="1" /><output id="p5-scale-y-value">1.00</output></div><div class="p5-axis"><span>Z</span><input id="p5-scale-z" type="range" min="0.5" max="1.8" step="0.05" value="1" /><output id="p5-scale-z-value">1.00</output></div></div>
+              <div class="control-group"><label>Komponen cahaya &amp; orbit</label><label class="check-row"><input id="p5-ambient-toggle" type="checkbox" checked /> Ambient</label><label class="check-row"><input id="p5-diffuse-toggle" type="checkbox" checked /> Diffuse</label><label class="check-row"><input id="p5-specular-toggle" type="checkbox" checked /> Specular</label><label class="check-row"><input id="p5-light-orbit" type="checkbox" /> Light orbit</label><label class="check-row"><input id="p5-camera-orbit" type="checkbox" /> Camera orbit</label></div>
+              <div class="control-group"><label>Rotasi objek</label><button class="btn" id="p5-rotation" type="button">Stop Object Rotation (P)</button></div>
+              <div class="control-group"><button class="btn primary" id="p5-reset" type="button">Reset scene (R)</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">02</span><h2>Konsep yang Diamati</h2></div>
+        <div class="p5-concepts">
+          <div><h3>Normal &amp; normal matrix</h3><p>Face normal menghasilkan flat shading; normal smooth diinterpolasi antar-vertex. Shader fragment menormalkan kembali vektor tersebut. Inverse-transpose dari bagian 3×3 Model Matrix menjaga normal tetap tegak lurus permukaan saat scale tidak seragam.</p></div>
+          <div><h3>Lighting Phong</h3><p>Ambient memberi penerangan dasar, diffuse bergantung pada sudut normal terhadap lampu, sedangkan specular membuat highlight yang dipengaruhi kamera dan shininess.</p><code>final = texture × (ambient + diffuse) + specular</code></div>
+          <div><h3>UV &amp; filtering</h3><p>UV menentukan lokasi sampling. Bandingkan checker procedural dengan SVG, lalu ubah NEAREST/LINEAR/mipmap dan REPEAT/CLAMP untuk melihat efek sampling dan wrapping.</p></div>
+          <div><h3>Camera &amp; animation</h3><p>Object rotation, camera orbit, dan light orbit memiliki state/waktu terpisah. Menjeda rotasi objek tidak menghentikan kontrol kamera, lampu, atau bentuk.</p></div>
+        </div>
+      </section>
+      <div class="footer-note"><span>Praktikum 5 · Textured and Lit Object Playground</span><span>WebGL2 · GLSL ES 3.00 · Vanilla JavaScript</span></div>
+    </main>
+  </div>
+  <script src="js/nav.js"></script>
+  <script type="module" src="js/praktikum5.js"></script>
+</body>
+</html>
