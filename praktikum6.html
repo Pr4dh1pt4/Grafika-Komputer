@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praktikum 6 — Three.js Scene Playground</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body data-page="p6">
+  <div class="topbar">
+    <button class="menu-btn" data-menu-toggle aria-label="Buka menu"></button>
+    <div class="brand-text"><strong>Praktikum 6</strong></div>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark"></div><div class="brand-text"><strong>Tim Murid Bapak</strong><span>Praktikum Grafika Komputer</span></div></div>
+      <div class="nav-section-label">Menu</div>
+      <ul class="nav-list"><li><a class="nav-link" data-page="home" href="index.html">Beranda</a></li></ul>
+      <div class="nav-section-label">Praktikum</div>
+      <ul class="nav-list">
+        <li><a class="nav-link" data-page="p1" href="praktikum1.html">Praktikum 1 — Canvas 2D <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p2" href="praktikum2.html">Praktikum 2 — WebGL <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p3" href="praktikum3.html">Praktikum 3 — Transform <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p4" href="praktikum4.html">Praktikum 4 — Camera <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p5" href="praktikum5.html">Praktikum 5 — Lighting &amp; Texture <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p6" href="praktikum6.html">Praktikum 6 — Three.js <span class="nav-badge live">Live</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="eyebrow">EF234504 · Pertemuan 6 · Dr. Darlis Herumurti</div>
+      <h1 class="page-title">Three.js Scene Playground</h1>
+      <p class="lede">Scene 3D lengkap dengan material, lighting, shadow, dua jenis kamera, dan OrbitControls — dibangun di atas abstraction Three.js yang tetap berjalan di WebGL.</p>
+
+      <section class="block">
+        <div class="section-heading"><h2>Deskripsi Praktikum</h2></div>
+        <p>Praktikum ini melanjutkan pipeline WebGL2 manual dari pertemuan sebelumnya. Buffer, shader, uniform, dan matrix yang sebelumnya ditulis sendiri kini dikelola Three.js melalui object <code>Scene</code>, <code>Camera</code>, <code>Mesh</code>, <code>Material</code>, dan <code>Light</code>. Fokusnya adalah memahami hubungan antar-object tersebut, lalu mengamatinya secara interaktif.</p>
+        <div class="flow-box"><div class="flow-step">Geometry + Material</div><div class="flow-arrow">→</div><div class="flow-step">Mesh · Scene graph</div><div class="flow-arrow">→</div><div class="flow-step">Light · Shadow map</div><div class="flow-arrow">→</div><div class="flow-step">Camera · OrbitControls</div><div class="flow-arrow">→</div><div class="flow-step">WebGLRenderer</div></div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><h2>Capaian &amp; Challenge A–H</h2></div>
+        <ul class="objectives">
+          <li><span class="idx">01</span><span>Scene, background, PerspectiveCamera, OrthographicCamera, dan WebGLRenderer yang responsif.</span><span class="check">✓</span></li>
+          <li><span class="idx">02</span><span>Cube, sphere, ground, cone, torus knot dengan lima jenis material.</span><span class="check">✓</span></li>
+          <li><span class="idx">03</span><span>AmbientLight, DirectionalLight, PointLight, serta shadow map dengan caster dan receiver.</span><span class="check">✓</span></li>
+          <li><span class="idx">04</span><span>Challenge A: toggle Perspective/Orthographic camera (C) yang mempertahankan sudut pandang.</span><span class="check">✓</span></li>
+          <li><span class="idx">05</span><span>Challenge B: light intensity dan light orbit (L) dengan light helpers.</span><span class="check">✓</span></li>
+          <li><span class="idx">06</span><span>Challenge C: shadow quality control melalui ukuran shadow map.</span><span class="check">✓</span></li>
+          <li><span class="idx">07</span><span>Challenge D: material gallery Basic, Lambert, Phong, Standard, dan Normal (H).</span><span class="check">✓</span></li>
+          <li><span class="idx">08</span><span>Challenge E: segment level untuk detail Sphere/TorusKnot geometry.</span><span class="check">✓</span></li>
+          <li><span class="idx">09</span><span>Challenge F: state-based continuous control cube utama (Arrow/WASD, Q/E).</span><span class="check">✓</span></li>
+          <li><span class="idx">10</span><span>Challenge G: event-based pause/reset/toggle animation (G, R) berbasis <code>THREE.Clock</code>.</span><span class="check">✓</span></li>
+          <li><span class="idx">11</span><span>Challenge H: OrbitControls dengan parameter orbit, zoom, pan, damping, dan reset kamera.</span><span class="check">✓</span></li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">01</span><h2>Three.js Scene Playground</h2></div>
+        <div class="playground p6-playground">
+          <div class="playground-header"><div><h3>Scene Playground</h3><p class="desc">Three.js · WebGLRenderer · shadow map · OrbitControls</p></div><span class="status-pill" id="p6-status">Memuat Three.js</span></div>
+          <div class="playground-body">
+            <div class="canvas-wrap p6-canvas-wrap">
+              <canvas id="p6-canvas" tabindex="0" aria-label="Scene Three.js dengan material, lighting, dan shadow"></canvas>
+              <div class="hint" id="p6-fallback" hidden></div>
+              <div class="stat-row p6-hud">
+                <span>Camera <b id="p6-hud-camera">Perspective</b></span><span>FOV / Zoom <b id="p6-hud-lens">50° · 1.00</b></span>
+                <span>Cube pos <b id="p6-hud-cube">(-1.80, 0.50, -0.40)</b></span><span>Cube rotY <b id="p6-hud-rot">0°</b></span>
+                <span>Light <b id="p6-hud-light">1.50 · static</b></span><span>Shadow map <b id="p6-hud-shadow">1024²</b></span>
+                <span>Segment <b id="p6-hud-segment">High</b></span><span>Animation <b id="p6-hud-anim">Playing</b></span>
+                <span>Draw calls <b id="p6-hud-calls">0</b></span><span>Triangles <b id="p6-hud-tris">0</b></span>
+                <span>Geometries <b id="p6-hud-geo">0</b></span><span>Textures <b id="p6-hud-tex">0</b></span>
+                <span>Objects <b id="p6-hud-objects">0</b></span><span>FPS <b id="p6-hud-fps">0</b></span>
+              </div>
+              <div class="hint"><kbd>Drag kiri</kbd> orbit · <kbd>Scroll</kbd> zoom · <kbd>Drag kanan</kbd> pan · <kbd>← → ↑ ↓</kbd>/<kbd>WASD</kbd> gerak cube · <kbd>Q E</kbd> rotasi cube · <kbd>C</kbd> kamera · <kbd>G</kbd> animasi · <kbd>L</kbd> light orbit · <kbd>H</kbd> gallery · <kbd>R</kbd> reset</div>
+            </div>
+            <div class="controls p6-controls">
+              <div class="control-group"><label for="p6-camera-mode">Camera mode</label><select id="p6-camera-mode"><option value="perspective">PerspectiveCamera</option><option value="orthographic">OrthographicCamera</option></select></div>
+              <div class="control-group"><label for="p6-fov">FOV <output id="p6-fov-value">50°</output></label><input id="p6-fov" type="range" min="30" max="90" step="1" value="50" /></div>
+              <div class="control-group"><label for="p6-light-intensity">Light intensity <output id="p6-light-intensity-value">1.50</output></label><input id="p6-light-intensity" type="range" min="0" max="3" step="0.05" value="1.5" /></div>
+              <div class="control-group"><label>Lighting</label><label class="check-row"><input id="p6-light-orbit" type="checkbox" /> Light orbit (L)</label><label class="check-row"><input id="p6-light-helpers" type="checkbox" checked /> Light helpers</label></div>
+              <div class="control-group"><label for="p6-shadow-quality">Shadow quality</label><select id="p6-shadow-quality"><option value="512">Low · 512²</option><option value="1024" selected>Medium · 1024²</option><option value="2048">High · 2048²</option><option value="4096">Ultra · 4096²</option></select></div>
+              <div class="control-group"><label for="p6-segment">Segment level <output id="p6-segment-value">High</output></label><input id="p6-segment" type="range" min="0" max="3" step="1" value="2" /></div>
+              <div class="control-group"><label>Objek</label><label class="check-row"><input id="p6-gallery" type="checkbox" checked /> Material gallery (H)</label><button class="btn" id="p6-animation" type="button">Pause Animation (G)</button></div>
+
+              <div class="control-group p6-orbit-group">
+                <label>OrbitControls</label>
+                <label class="check-row"><input id="p6-orbit-enabled" type="checkbox" checked /> Aktifkan kontrol kamera</label>
+                <label class="check-row"><input id="p6-orbit-pan" type="checkbox" checked /> Izinkan pan</label>
+                <label class="check-row"><input id="p6-orbit-damping" type="checkbox" checked /> Damping</label>
+                <div class="p6-param"><span>Damping factor</span><output id="p6-damping-factor-value">0.05</output></div>
+                <input id="p6-damping-factor" type="range" min="0.01" max="0.25" step="0.01" value="0.05" aria-label="Damping factor" />
+                <div class="p6-param"><span>Camera rotate speed</span><output id="p6-rotate-speed-value">1.00</output></div>
+                <input id="p6-rotate-speed" type="range" min="0.1" max="3" step="0.05" value="1" aria-label="Camera rotate speed" />
+                <div class="p6-param"><span>Camera zoom speed</span><output id="p6-zoom-speed-value">1.00</output></div>
+                <input id="p6-zoom-speed" type="range" min="0.1" max="3" step="0.05" value="1" aria-label="Camera zoom speed" />
+              </div>
+
+              <div class="control-group"><button class="btn primary" id="p6-reset" type="button">Reset scene (R)</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">02</span><h2>Fitur Implementasi</h2></div>
+        <ul class="p6-list">
+          <li><code>Scene</code>, background, <code>PerspectiveCamera</code>, <code>OrthographicCamera</code>, dan <code>WebGLRenderer</code>;</li>
+          <li>responsive renderer dan camera aspect saat resize;</li>
+          <li>cube, sphere, ground, cone, torus knot, dan material gallery;</li>
+          <li><code>MeshBasicMaterial</code>, <code>MeshLambertMaterial</code>, <code>MeshPhongMaterial</code>, <code>MeshStandardMaterial</code>, dan <code>MeshNormalMaterial</code>;</li>
+          <li>AmbientLight, DirectionalLight, PointLight;</li>
+          <li>shadow map dengan caster dan receiver;</li>
+          <li>animation loop berbasis <code>THREE.Clock</code> dan delta time;</li>
+          <li>toggle perspective/orthographic camera;</li>
+          <li>OrbitControls untuk orbit, zoom, pan, damping, dan reset kamera;</li>
+          <li>light intensity dan light orbit;</li>
+          <li>shadow quality control;</li>
+          <li>state-based continuous object control;</li>
+          <li>event-based pause/reset/toggle animation;</li>
+          <li>scene information dan <code>renderer.info</code> HUD.</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">03</span><h2>Kontrol</h2></div>
+        <div class="p6-table-wrap">
+          <table class="p6-table">
+            <thead><tr><th>Kontrol</th><th>Fungsi</th></tr></thead>
+            <tbody>
+              <tr><td>Drag tombol kiri</td><td>Orbit kamera mengelilingi target</td></tr>
+              <tr><td>Scroll mouse</td><td>Zoom mendekat atau menjauh</td></tr>
+              <tr><td>Drag tombol kanan</td><td>Pan kamera beserta target</td></tr>
+              <tr><td>Camera mode</td><td>Perspective atau Orthographic Camera</td></tr>
+              <tr><td>FOV</td><td>Field of view PerspectiveCamera</td></tr>
+              <tr><td>Light intensity</td><td>Intensitas DirectionalLight</td></tr>
+              <tr><td>Light orbit</td><td>Menggerakkan light mengelilingi scene</td></tr>
+              <tr><td>Light helpers</td><td>Menampilkan/menyembunyikan garis dan panah arah DirectionalLight serta penanda PointLight</td></tr>
+              <tr><td>Shadow quality</td><td>Mengatur ukuran shadow map</td></tr>
+              <tr><td>Material gallery</td><td>Menampilkan objek dengan material berbeda</td></tr>
+              <tr><td>Segment level</td><td>Mengubah detail Sphere/TorusKnot geometry</td></tr>
+              <tr><td>Animation</td><td>Pause/resume rotasi object</td></tr>
+              <tr><td><kbd>Arrow</kbd> / <kbd>WASD</kbd></td><td>Menggerakkan cube utama secara state-based</td></tr>
+              <tr><td><kbd>Q</kbd> / <kbd>E</kbd></td><td>Rotasi cube utama</td></tr>
+              <tr><td><kbd>R</kbd></td><td>Reset transform dan camera</td></tr>
+              <tr><td><kbd>G</kbd></td><td>Pause/resume animation</td></tr>
+              <tr><td><kbd>C</kbd></td><td>Toggle camera</td></tr>
+              <tr><td><kbd>L</kbd></td><td>Toggle light orbit</td></tr>
+              <tr><td><kbd>H</kbd></td><td>Toggle material gallery</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">04</span><h2>Parameter Control</h2></div>
+        <div class="p6-table-wrap">
+          <table class="p6-table">
+            <thead><tr><th>Parameter OrbitControls</th><th>Fungsi / nilai awal</th></tr></thead>
+            <tbody>
+              <tr><td>Aktifkan kontrol kamera</td><td>Mengaktifkan input orbit, zoom, dan pan; awal aktif</td></tr>
+              <tr><td>Izinkan pan</td><td>Mengizinkan drag kanan menggeser kamera dan target; awal aktif</td></tr>
+              <tr><td>Damping</td><td>Memperhalus gerakan setelah input berhenti; awal aktif</td></tr>
+              <tr><td>Damping factor</td><td>0.01–0.25; awal 0.05. Nilai lebih besar membuat gerakan berhenti lebih cepat</td></tr>
+              <tr><td>Camera rotate speed</td><td>0.1–3; awal 1.00. Mengatur sensitivitas drag orbit kamera</td></tr>
+              <tr><td>Camera zoom speed</td><td>0.1–3; awal 1.00. Mengatur sensitivitas scroll zoom</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="p6-note">Pengaturan langsung diterapkan dan dipertahankan ketika berganti kamera. Damping factor hanya dapat diubah saat Damping aktif. Reset (R) mengembalikan semua parameter OrbitControls ke nilai awal.</p>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">05</span><h2>OrbitControls — Navigasi Kamera</h2></div>
+        <div class="p6-prose">
+          <p>OrbitControls membantu mengamati geometry, material, lighting, dan shadow dari berbagai sudut. Drag kiri menggerakkan kamera mengelilingi target; scroll mengatur zoom; drag kanan menggeser kamera beserta target. Transform objek tetap dikontrol melalui Arrow/WASD dan Q/E.</p>
+          <p>Addon diimpor dari <code>three/addons/controls/OrbitControls.js</code> dan dihubungkan ke kamera aktif serta <code>renderer.domElement</code>. Target awal adalah <code>(0, 0.8, 0)</code>. <code>enableDamping = true</code> memperhalus gerakan, dengan <code>controls.update()</code> dipanggil setiap frame, termasuk ketika animasi objek dijeda menggunakan G.</p>
+          <p>Pergantian Perspective/Orthographic melalui C atau dropdown mempertahankan posisi kamera dan target pandang. Kontrol lama di-<code>dispose()</code>, lalu dibuat kembali untuk kamera aktif. Reset (R) mengembalikan PerspectiveCamera ke posisi <code>(4.8, 3.6, 6.5)</code>, target awal, FOV 50, dan zoom 1, sekaligus membuang sisa damping.</p>
+          <p><strong class="p6-accent">Coba:</strong> orbit mengelilingi sphere, zoom untuk mengamati material, lakukan pan, jeda animasi dengan G, lalu coba navigasi kamera lagi. Tekan R untuk kembali ke tampilan awal. Tombol Light orbit (L) menggerakkan lampu; navigasi kamera memakai mouse.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">06</span><h2>Penjelasan Teknis</h2></div>
+        <div class="p6-prose">
+          <h3>Hubungan Three.js dan WebGL</h3>
+          <p>Three.js menyederhanakan pekerjaan low-level WebGL melalui object abstraction:</p>
+          <pre class="p6-code"><code>Scene + Camera + Renderer + Geometry + Material = Mesh</code></pre>
+          <p>Di belakang abstraction tersebut tetap terdapat buffer, shader, attribute, uniform, matrix, lighting, dan draw call WebGL — semua hal yang ditulis manual pada Praktikum 2–5.</p>
+
+          <h3>Scene graph dan transform</h3>
+          <p>Setiap Mesh memiliki <code>position</code>, <code>rotation</code>, dan <code>scale</code>. Three.js menggabungkannya menjadi Model Matrix. <code>scene.add(mesh)</code> memasukkan object ke scene graph. Parent-child dapat dibuat melalui <code>Object3D.add(child)</code>; pada playground, material gallery adalah sebuah <code>Group</code> berisi sphere dan label.</p>
+
+          <h3>Material dan lighting</h3>
+          <p><strong class="p6-accent">Light helpers</strong> aktif secara default dan dapat dimatikan melalui panel kontrol. Garis serta panah kuning menunjukkan arah DirectionalLight dari posisi lampu menuju target <code>(0, 0, 0)</code>; kotak kuning menandai lampu tersebut. Penanda cyan menunjukkan posisi PointLight, yang memancarkan cahaya ke segala arah. AmbientLight tidak memiliki arah sehingga tidak diberi panah.</p>
+          <p>Aktifkan Light orbit (L) untuk mengamati perubahan arah cahaya dan bayangan. Helper diperbarui sebelum render, termasuk ketika animasi dijeda atau scene di-reset. Reset (R) juga mengaktifkan kembali helper.</p>
+          <p><code>MeshBasicMaterial</code> tidak memerlukan light. <code>MeshLambertMaterial</code>, <code>MeshPhongMaterial</code>, dan <code>MeshStandardMaterial</code> merespons lighting. <code>MeshNormalMaterial</code> memvisualisasikan arah normal sebagai warna dan berguna untuk debugging.</p>
+
+          <h3>Shadow map</h3>
+          <p>Shadow membutuhkan konfigurasi berantai: renderer mengaktifkan <code>shadowMap.enabled</code>, light menggunakan <code>castShadow</code>, object menggunakan <code>castShadow</code>, dan ground menggunakan <code>receiveShadow</code>. Shadow camera serta shadow map size mengontrol area dan kualitas bayangan.</p>
+
+          <h3>Camera dan responsive rendering</h3>
+          <p>PerspectiveCamera menggunakan FOV dan aspect ratio. OrthographicCamera menjaga ukuran relatif object. Pada resize, renderer size, pixel ratio, dan camera aspect/projection matrix diperbarui agar scene tidak terdistorsi.</p>
+
+          <h3>Animation dan input</h3>
+          <p><code>THREE.Clock.getDelta()</code> menghasilkan delta time sehingga animasi frame-rate independent. <code>keydown</code>/<code>keyup</code> menyimpan state tombol, kemudian transform cube diperbarui setiap frame. Pause, reset, dan toggle menggunakan event-based action.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">07</span><h2>Checklist</h2></div>
+        <ul class="p6-checklist">
+          <li><input type="checkbox" checked disabled /> Dependency Three.js dan renderer</li>
+          <li><input type="checkbox" checked disabled /> Scene, background, camera, geometry, material</li>
+          <li><input type="checkbox" checked disabled /> Minimal dua material dan material gallery</li>
+          <li><input type="checkbox" checked disabled /> Light dan shadow</li>
+          <li><input type="checkbox" checked disabled /> Animation loop delta time</li>
+          <li><input type="checkbox" checked disabled /> Responsive renderer/camera</li>
+          <li><input type="checkbox" checked disabled /> HUD scene information</li>
+          <li><input type="checkbox" checked disabled /> Challenge A–H</li>
+        </ul>
+      </section>
+
+      <div class="footer-note"><span>Praktikum 6 · Three.js Scene Playground</span><span>Three.js r160 · WebGLRenderer · Vanilla JavaScript</span></div>
+    </main>
+  </div>
+  <script src="js/nav.js"></script>
+  <script>
+    // Tampilkan pesan bila modul Three.js gagal dimuat (mis. offline atau CDN diblokir).
+    setTimeout(function () {
+      if (window.__p6Ready) return;
+      var status = document.getElementById("p6-status");
+      var fallback = document.getElementById("p6-fallback");
+      status.textContent = "Gagal memuat Three.js";
+      fallback.hidden = false;
+      fallback.textContent = "Three.js dimuat dari CDN jsDelivr. Pastikan koneksi internet aktif dan halaman dibuka melalui local server.";
+    }, 8000);
+  </script>
+  <script type="module" src="js/praktikum6.js"></script>
+</body>
+</html>

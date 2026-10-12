@@ -236,3 +236,40 @@ melalui local server agar modul ES dan image texture SVG dimuat pada origin yang
 
 HUD menampilkan bentuk, shading, posisi light, sumber texture, filtering, wrapping, mode normal,
 dan FPS. Belum ada perhitungan bayangan antarpermukaan (self-shadow).
+
+### 7. Praktikum 6 — Three.js Scene Playground
+
+Praktikum 6 berpindah dari WebGL2 manual ke Three.js. Buffer, shader, uniform, dan matrix kini
+dikelola melalui object `Scene`, `Camera`, `Mesh`, `Material`, dan `Light`. Three.js r160 dimuat
+dari CDN jsDelivr melalui import map, sehingga `praktikum6.html` perlu dibuka lewat local server
+dengan koneksi internet.
+
+* **Scene, kamera, dan renderer**
+  - `WebGLRenderer` dengan shadow map (`PCFSoftShadowMap`), background, dan fog.
+  - `PerspectiveCamera` (FOV 50, posisi `(4.8, 3.6, 6.5)`, target `(0, 0.8, 0)`) dan
+    `OrthographicCamera`. Toggle dengan `C` atau dropdown mempertahankan posisi dan target.
+  - Renderer size, pixel ratio, aspect, dan projection matrix diperbarui melalui `ResizeObserver`.
+
+* **Geometry dan material**
+  - Cube, sphere, cone, torus knot, dan ground yang menerima bayangan.
+  - Material gallery (`H`): satu sphere geometry dipakai lima material — Basic, Lambert, Phong,
+    Standard, dan Normal — lengkap dengan label sprite.
+  - Segment level mengganti detail Sphere/TorusKnot geometry (geometry lama di-`dispose()`).
+
+* **Lighting dan shadow**
+  - AmbientLight, DirectionalLight (caster bayangan), dan PointLight.
+  - Light intensity, light orbit (`L`), serta light helpers (garis/panah kuning dan penanda cyan).
+  - Shadow quality 512²–4096²; shadow map lama dibuang agar ukuran baru dialokasikan ulang.
+
+* **OrbitControls**
+  - Orbit (drag kiri), zoom (scroll), pan (drag kanan), damping, damping factor, rotate speed, dan
+    zoom speed. Pengaturan dipertahankan ketika berganti kamera; `controls.update()` dipanggil
+    setiap frame.
+
+* **Animasi dan input**
+  - Loop berbasis `THREE.Clock.getDelta()`; `G` menjeda/melanjutkan animasi objek.
+  - Arrow/WASD menggerakkan cube utama dan `Q`/`E` memutarnya secara state-based.
+  - `R` mereset transform, kamera, lampu, helper, dan parameter OrbitControls.
+
+HUD menampilkan jenis kamera, FOV/zoom, transform cube, light, shadow map, segment, status
+animasi, serta `renderer.info` (draw calls, triangles, geometries, textures), jumlah objek, dan FPS.
