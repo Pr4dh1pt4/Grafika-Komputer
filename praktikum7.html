@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praktikum 7 — Three.js Interactive 3D Application</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body data-page="p7">
+  <div class="topbar">
+    <button class="menu-btn" data-menu-toggle aria-label="Buka menu"></button>
+    <div class="brand-text"><strong>Praktikum 7</strong></div>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark"></div><div class="brand-text"><strong>Tim Murid Bapak</strong><span>Praktikum Grafika Komputer</span></div></div>
+      <div class="nav-section-label">Menu</div>
+      <ul class="nav-list"><li><a class="nav-link" data-page="home" href="index.html">Beranda</a></li></ul>
+      <div class="nav-section-label">Praktikum</div>
+      <ul class="nav-list">
+        <li><a class="nav-link" data-page="p1" href="praktikum1.html">Praktikum 1 — Canvas 2D <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p2" href="praktikum2.html">Praktikum 2 — WebGL <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p3" href="praktikum3.html">Praktikum 3 — Transform <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p4" href="praktikum4.html">Praktikum 4 — Camera <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p5" href="praktikum5.html">Praktikum 5 — Lighting &amp; Texture <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p6" href="praktikum6.html">Praktikum 6 — Three.js <span class="nav-badge live">Live</span></a></li>
+        <li><a class="nav-link" data-page="p7" href="praktikum7.html">Praktikum 7 — Interactive 3D <span class="nav-badge live">Live</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <div class="eyebrow">EF234504 · Pertemuan 7 · Dr. Darlis Herumurti</div>
+      <h1 class="page-title">Three.js Interactive 3D Application</h1>
+      <p class="lede">Aplikasi 3D interaktif dengan scene graph bertingkat, material PBR, model GLB beranimasi, raycasting untuk hover dan selection, panorama HDR, serta postprocessing bloom.</p>
+
+      <section class="block">
+        <div class="section-heading"><h2>Deskripsi Praktikum</h2></div>
+        <p>Praktikum ini melanjutkan scene Three.js pada Praktikum 6 menjadi aplikasi yang dapat dijelajahi dan dipilih objeknya. Model <code>Duck.glb</code> dimuat secara asynchronous dengan <code>GLTFLoader</code>, panorama HDR diproses <code>PMREMGenerator</code> untuk refleksi, dan hasil render melewati <code>EffectComposer</code> agar emisi kuat menghasilkan halo bloom.</p>
+        <div class="flow-box"><div class="flow-step">GLB · HDR asset</div><div class="flow-arrow">→</div><div class="flow-step">Scene graph · PBR</div><div class="flow-arrow">→</div><div class="flow-step">Raycaster · Pointer NDC</div><div class="flow-arrow">→</div><div class="flow-step">AnimationMixer</div><div class="flow-arrow">→</div><div class="flow-step">Render · Bloom · Output</div></div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><h2>Capaian &amp; Challenge A–H</h2></div>
+        <ul class="objectives">
+          <li><span class="idx">01</span><span>Scene, kamera, renderer, lighting, ground, shadow, dan resize responsif.</span><span class="check">✓</span></li>
+          <li><span class="idx">02</span><span><code>THREE.Group</code>, parent-child, local/world transform, dan solar hierarchy.</span><span class="check">✓</span></li>
+          <li><span class="idx">03</span><span>GLB asynchronous loading, <code>GLTFLoader</code>, <code>traverse()</code>, shadow, HUD status, dan fallback.</span><span class="check">✓</span></li>
+          <li><span class="idx">04</span><span>Raycaster, pointer NDC, recursive intersection, hover, click, dan selection state.</span><span class="check">✓</span></li>
+          <li><span class="idx">05</span><span>Challenge A: multiple animation clips (1/2/3) · Challenge B: click menjalankan animation.</span><span class="check">✓</span></li>
+          <li><span class="idx">06</span><span>Challenge C: information panel · Challenge D: hierarchical solar system.</span><span class="check">✓</span></li>
+          <li><span class="idx">07</span><span>Challenge E: PBR material gallery · Challenge F: hover emissive dengan penyimpanan state material.</span><span class="check">✓</span></li>
+          <li><span class="idx">08</span><span>Challenge G: selection rotation berbasis delta time · Challenge H: environment toggle.</span><span class="check">✓</span></li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">01</span><h2>Interactive 3D Playground</h2></div>
+        <div class="playground p7-playground">
+          <div class="playground-header"><div><h3>Interactive Scene</h3><p class="desc">GLTFLoader · Raycaster · HDR + PMREM · UnrealBloomPass</p></div><span class="status-pill" id="p7-status">Memuat Three.js</span></div>
+          <div class="playground-body">
+            <div class="canvas-wrap p7-canvas-wrap">
+              <canvas id="p7-canvas" tabindex="0" aria-label="Aplikasi 3D interaktif: klik objek untuk memilih"></canvas>
+              <div class="hint" id="p7-fallback" hidden></div>
+              <div class="stat-row p7-hud">
+                <span>Camera <b id="p7-hud-camera">Perspective</b></span><span>FOV / Zoom <b id="p7-hud-lens">52° · 1.00</b></span>
+                <span>GLB <b id="p7-hud-glb">Memuat…</b></span><span>Clips <b id="p7-hud-clips">—</b></span>
+                <span>Active clip <b id="p7-hud-clip">—</b></span><span>Solar <b id="p7-hud-solar">Running</b></span>
+                <span>Panorama <b id="p7-hud-panorama">—</b></span><span>Env / Bloom <b id="p7-hud-env">ON · ON</b></span>
+                <span>Hover <b id="p7-hud-hover">—</b></span><span>Selected <b id="p7-hud-selected">—</b></span>
+                <span>Draw calls <b id="p7-hud-calls">0</b></span><span>Triangles <b id="p7-hud-tris">0</b></span>
+                <span>Geometries <b id="p7-hud-geo">0</b></span><span>FPS <b id="p7-hud-fps">0</b></span>
+              </div>
+              <div class="p7-info" aria-live="polite">
+                <div class="p7-info-title">Selection information <span id="p7-info-state">Klik objek untuk memilih</span></div>
+                <dl>
+                  <dt>Name</dt><dd id="p7-info-name">—</dd>
+                  <dt>Object type</dt><dd id="p7-info-type">—</dd>
+                  <dt>Material</dt><dd id="p7-info-material">—</dd>
+                  <dt>Local position</dt><dd id="p7-info-local">—</dd>
+                  <dt>World position</dt><dd id="p7-info-world">—</dd>
+                  <dt>Rotation</dt><dd id="p7-info-rotation">—</dd>
+                  <dt>Scale</dt><dd id="p7-info-scale">—</dd>
+                  <dt>Parent</dt><dd id="p7-info-parent">—</dd>
+                </dl>
+              </div>
+              <div class="hint"><kbd>Drag kiri</kbd> orbit · <kbd>Scroll</kbd> zoom · <kbd>Drag kanan</kbd> pan · <kbd>Klik</kbd> pilih objek · <kbd>1 2 3</kbd> clip · <kbd>S</kbd> solar · <kbd>E</kbd> refleksi · <kbd>P</kbd> panorama · <kbd>C</kbd> kamera · <kbd>R</kbd> reset</div>
+            </div>
+            <div class="controls p7-controls">
+              <div class="control-group"><label for="p7-camera-mode">Active camera</label><select id="p7-camera-mode"><option value="perspective">Perspective Camera</option><option value="orthographic">Orthographic Camera</option></select></div>
+              <div class="control-group"><label for="p7-fov">Camera FOV <output id="p7-fov-value">52°</output></label><input id="p7-fov" type="range" min="25" max="100" step="1" value="52" /></div>
+
+              <div class="control-group p7-section">
+                <label for="p7-panorama">Skybox / panorama</label>
+                <select id="p7-panorama"><option value="studio">Studio Small 09 (HDR)</option><option value="ladybrand">Ladybrand Heritage House (HDR)</option><option value="procedural">Panorama procedural</option></select>
+                <span class="p7-panorama-status" id="p7-panorama-status">Menyiapkan panorama…</span>
+                <label class="check-row"><input id="p7-background" type="checkbox" checked /> Panorama (P)</label>
+                <label class="check-row"><input id="p7-environment" type="checkbox" checked /> Refleksi / environment (E)</label>
+                <label class="check-row"><input id="p7-bloom" type="checkbox" checked /> Bloom</label>
+              </div>
+              <div class="control-group"><label for="p7-emissive">Emissive intensity <output id="p7-emissive-value">5.0</output></label><input id="p7-emissive" type="range" min="0" max="20" step="0.1" value="5" /></div>
+              <div class="control-group"><label for="p7-bloom-strength">Bloom intensity <output id="p7-bloom-strength-value">0.55</output></label><input id="p7-bloom-strength" type="range" min="0" max="3" step="0.05" value="0.55" /></div>
+              <div class="control-group"><label for="p7-bloom-radius">Bloom radius <output id="p7-bloom-radius-value">0.30</output></label><input id="p7-bloom-radius" type="range" min="0" max="1" step="0.01" value="0.3" /></div>
+
+              <div class="control-group p7-section"><label for="p7-roughness">Roughness <output id="p7-roughness-value">0.40</output></label><input id="p7-roughness" type="range" min="0" max="1" step="0.01" value="0.4" /></div>
+              <div class="control-group"><label for="p7-metalness">Metalness <output id="p7-metalness-value">0.50</output></label><input id="p7-metalness" type="range" min="0" max="1" step="0.01" value="0.5" /></div>
+              <div class="control-group"><label for="p7-orbit-speed">Orbit speed <output id="p7-orbit-speed-value">1.00</output></label><input id="p7-orbit-speed" type="range" min="0" max="3" step="0.05" value="1" /></div>
+
+              <div class="control-group p7-section">
+                <label>Animation clip</label>
+                <div class="btn-row p7-clips"><button class="btn" id="p7-clip-0" type="button" disabled>1</button><button class="btn" id="p7-clip-1" type="button" disabled>2</button><button class="btn" id="p7-clip-2" type="button" disabled>3</button></div>
+                <button class="btn" id="p7-solar" type="button">Pause Solar (S)</button>
+              </div>
+
+              <div class="control-group p7-section">
+                <label>OrbitControls</label>
+                <label class="check-row"><input id="p7-orbit-enabled" type="checkbox" checked /> Aktifkan kontrol kamera</label>
+                <label class="check-row"><input id="p7-orbit-pan" type="checkbox" checked /> Izinkan pan</label>
+                <label class="check-row"><input id="p7-orbit-damping" type="checkbox" checked /> Damping</label>
+                <div class="p6-param"><span>Damping factor</span><output id="p7-damping-factor-value">0.05</output></div>
+                <input id="p7-damping-factor" type="range" min="0.01" max="0.25" step="0.01" value="0.05" aria-label="Damping factor" />
+                <div class="p6-param"><span>Camera rotate speed</span><output id="p7-rotate-speed-value">1.00</output></div>
+                <input id="p7-rotate-speed" type="range" min="0.1" max="3" step="0.05" value="1" aria-label="Camera rotate speed" />
+                <div class="p6-param"><span>Camera zoom speed</span><output id="p7-zoom-speed-value">1.00</output></div>
+                <input id="p7-zoom-speed" type="range" min="0.1" max="3" step="0.05" value="1" aria-label="Camera zoom speed" />
+              </div>
+
+              <div class="control-group"><button class="btn primary" id="p7-reset" type="button">Reset scene (R)</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">02</span><h2>Cara Menjalankan</h2></div>
+        <div class="p6-prose">
+          <p>Buka <code>praktikum7.html</code> melalui server HTTP, misalnya <strong class="p6-accent">Live Server</strong> di VS Code atau <code>python -m http.server</code>. Jangan membuka file langsung melalui <code>file://</code>, karena ES module, <code>Duck.glb</code>, dan file HDR dapat diblokir oleh kebijakan keamanan browser.</p>
+          <pre class="p6-code"><code>python -m http.server 3400
+# lalu buka http://localhost:3400/praktikum7.html</code></pre>
+          <p>Import map di HTML memetakan <code>"three"</code> dan <code>"three/addons/"</code> ke Three.js versi <code>0.185.1</code> di jsDelivr; koneksi internet diperlukan untuk library. Aset GLB dan HDR disimpan lokal di folder <code>assets/</code>. HTML, JavaScript, dan CSS dipisahkan agar mudah dibaca dan dimodifikasi.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">03</span><h2>Panorama, Kaca, Silver, dan Bloom</h2></div>
+        <ul class="p6-list p7-list">
+          <li>Dropdown <strong class="p6-accent">Skybox / panorama</strong> memilih Studio Small 09, Ladybrand Heritage House (<code>assets/ladybrand_heritage_house_1k.hdr</code>), atau panorama procedural. Pilihan memperbarui latar dan refleksi sesuai toggle masing-masing. Selama pemuatan, panorama sebelumnya tetap tersedia; jika gagal, pilihan kembali ke panorama aktif. Pergantian cepat hanya menerapkan pilihan terakhir.</li>
+          <li><strong class="p6-accent">Emissive intensity</strong> (0–20, awal 5) mengatur emisi sphere kuning hierarchy dan Sun. <strong class="p6-accent">Bloom intensity</strong> (0–3, awal 0.55) mengatur kekuatan halo; <strong class="p6-accent">Bloom radius</strong> (0–1, awal 0.30) mengatur sebarannya. Nilai tampil dan diterapkan langsung. Bloom tetap menggunakan threshold 3, sehingga emisi rendah dapat tidak menghasilkan halo; highlight HDR lain juga bisa terkena bloom. Point light tidak diubah oleh slider emisi.</li>
+          <li><strong class="p6-accent">Reset (R)</strong> juga mengembalikan pilihan Studio Small 09 serta ketiga parameter emisi/bloom ke nilai awal.</li>
+          <li><strong class="p6-accent">Panorama (P)</strong> menyalakan/mematikan latar 360°. <strong class="p6-accent">Refleksi (E)</strong> mengatur <code>scene.environment</code> secara terpisah, sehingga silver tetap reflektif ketika latar dimatikan.</li>
+          <li><strong class="p6-accent">Bloom</strong> menyalakan/mematikan halo cahaya. Sphere kuning pada hierarchy dan Sun memakai emissive kuning dengan intensitas 5 serta point light. Hover/selection tidak mengganti emisi keduanya.</li>
+          <li>Kubus parent menggunakan <code>MeshPhysicalMaterial</code>, <code>transmission: 0.95</code>, <code>thickness: 1.4</code>, <code>ior: 1.45</code>, dan <code>roughness: 0.08</code> untuk kaca transparan/refraktif. <code>opacity: 1</code> disengaja karena transparansi kaca diatur melalui transmission. Shadow kubus dimatikan karena shadow map biasa tidak memodelkan transmisi kaca.</li>
+          <li>Sphere besar di kanan depan menggunakan warna silver, <code>metalness: 1</code>, <code>roughness: 0.08</code>, dan refleksi HDR yang diproses dengan PMREM. Slider gallery tidak mengubah material silver/kaca.</li>
+          <li>Refleksi ini berbasis panorama yang dipilih: objek lokal yang bergerak tidak ikut terpantul. Ini bukan ray tracing atau refleksi dinamis menggunakan CubeCamera.</li>
+          <li>Reset (R) mengaktifkan kembali panorama, refleksi, dan bloom, serta membersihkan highlight/scale interaksi.</li>
+        </ul>
+
+        <h3 class="p7-subheading">Rekomendasi format panorama</h3>
+        <div class="p6-table-wrap p7-wide">
+          <table class="p6-table">
+            <thead><tr><th>Format</th><th>Kapan digunakan</th></tr></thead>
+            <tbody>
+              <tr><td><strong class="p6-accent">Equirectangular / spherical HDR (dipakai)</strong></td><td>Satu gambar 2:1 untuk latar 360° dan pencahayaan/refleksi PBR; mudah dimuat dan diganti. HDR menyimpan rentang intensitas cahaya yang lebih besar daripada PNG/JPG.</td></tr>
+              <tr><td>Cubemap / skybox enam sisi</td><td>Cocok jika aset sudah tersedia sebagai enam gambar <code>px, nx, py, ny, pz, nz</code>; perlu memastikan orientasi dan sambungan antarsisi.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p6-prose p7-after-table">
+          <p>Skybox adalah cara menampilkan lingkungan, sedangkan cubemap dan equirectangular adalah format pemetaannya. Equirectangular juga dapat menjadi latar skybox di Three.js.</p>
+          <p>Aset lokal: <code>assets/studio_small_09_1k.hdr</code> (sekitar 1.54 MiB), <strong class="p6-accent">Studio Small 09</strong> oleh <strong class="p6-accent">Sergej Majboroda</strong>, dari <a href="https://polyhaven.com/a/studio_small_09" target="_blank" rel="noopener">Poly Haven</a>, lisensi <strong class="p6-accent">CC0</strong>. Pilihan studio memberi pola softbox yang jelas pada silver dan kaca. Resolusi 1K ringan untuk praktikum; gunakan 2K/4K jika detail latar lebih penting. Lihat <code>assets/README.md</code> untuk sumber unduhan.</p>
+          <p><code>HDRLoader</code> memuat aset lokal; <code>PMREMGenerator</code> menyiapkan refleksi sesuai roughness. Jika HDR gagal dimuat, panorama procedural tetap tersedia dan panel menampilkan status fallback. Rangkaian postprocessing: <code>RenderPass -&gt; UnrealBloomPass -&gt; OutputPass</code>, dengan ACES tone mapping. Bloom memakai threshold 3 untuk terutama menangkap emisi HDR; highlight HDR lain yang sangat terang juga dapat berpendar.</p>
+          <p>Referensi: <a href="https://threejs.org/docs/#examples/en/loaders/HDRLoader" target="_blank" rel="noopener">HDRLoader</a>, <a href="https://threejs.org/docs/#api/en/extras/PMREMGenerator" target="_blank" rel="noopener">PMREMGenerator</a>, <a href="https://threejs.org/docs/#examples/en/postprocessing/OutputPass" target="_blank" rel="noopener">OutputPass</a>.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">04</span><h2>Kontrol</h2></div>
+        <div class="p6-table-wrap p7-wide">
+          <table class="p6-table">
+            <thead><tr><th>Kontrol</th><th>Fungsi</th></tr></thead>
+            <tbody>
+              <tr><td>Drag tombol kiri</td><td>Orbit kamera mengelilingi target.</td></tr>
+              <tr><td>Scroll mouse</td><td>Zoom mendekat atau menjauh.</td></tr>
+              <tr><td>Drag tombol kanan</td><td>Pan kamera beserta target.</td></tr>
+              <tr><td>Active camera</td><td>Memilih Perspective Camera atau Orthographic Camera.</td></tr>
+              <tr><td>Camera FOV</td><td>Mengatur field of view kamera perspektif, 25–100 derajat.</td></tr>
+              <tr><td>Roughness</td><td>Mengubah kekasaran material PBR pada gallery sphere. Nilai kecil menghasilkan highlight tajam; nilai besar lebih diffuse.</td></tr>
+              <tr><td>Metalness</td><td>Mengubah karakter non-metal hingga metal. Material metal sangat bergantung pada environment untuk memperoleh refleksi yang masuk akal.</td></tr>
+              <tr><td>Orbit speed</td><td>Mengatur kecepatan rotasi hierarchy tata surya dan orbit lampu.</td></tr>
+              <tr><td>Environment (<kbd>E</kbd>)</td><td>Membandingkan <code>scene.environment</code> aktif dan nonaktif.</td></tr>
+              <tr><td>Reset (<kbd>R</kbd>)</td><td>Mengembalikan kamera, environment, selection, hierarchy, dan solar animation.</td></tr>
+              <tr><td>Clip 1/2/3 atau tombol <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd></td><td>Mengganti <code>AnimationAction</code> jika GLB menyediakan beberapa clip.</td></tr>
+              <tr><td>Solar (<kbd>S</kbd>)</td><td>Pause/resume parent-child hierarchy Sun–Earth–Moon.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="p6-note">Interaksi mouse menggunakan <code>pointermove</code> untuk hover dan <code>click</code> untuk selection. Hover memberi emissive dan scale 1.06. Selection disimpan terpisah, memberi scale 1.12, rotasi berkelanjutan, dan mengisi panel informasi.</p>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">05</span><h2>Parameter Control</h2></div>
+        <div class="p6-table-wrap">
+          <table class="p6-table">
+            <thead><tr><th>Parameter OrbitControls</th><th>Fungsi / nilai awal</th></tr></thead>
+            <tbody>
+              <tr><td>Aktifkan kontrol kamera</td><td>Mengaktifkan input orbit, zoom, dan pan; awal aktif</td></tr>
+              <tr><td>Izinkan pan</td><td>Mengizinkan drag kanan menggeser kamera dan target; awal aktif</td></tr>
+              <tr><td>Damping</td><td>Memperhalus gerakan setelah input berhenti; awal aktif</td></tr>
+              <tr><td>Damping factor</td><td>0.01–0.25; awal 0.05. Nilai lebih besar membuat gerakan berhenti lebih cepat</td></tr>
+              <tr><td>Camera rotate speed</td><td>0.1–3; awal 1.00. Mengatur sensitivitas drag orbit kamera</td></tr>
+              <tr><td>Camera zoom speed</td><td>0.1–3; awal 1.00. Mengatur sensitivitas scroll zoom</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="p6-note">Pengaturan langsung diterapkan dan dipertahankan ketika berganti kamera. Damping factor hanya dapat diubah saat Damping aktif. Reset (R) mengembalikan semua parameter OrbitControls ke nilai awal.</p>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">06</span><h2>OrbitControls — Navigasi dan Selection</h2></div>
+        <div class="p6-prose">
+          <p>OrbitControls dipakai untuk menjelajahi scene dan model GLB. Drag kiri melakukan orbit kamera, scroll mengatur zoom, dan drag kanan melakukan pan. Klik kiri tanpa drag memilih objek dan memperbarui panel informasi. Slider Orbit speed mengatur animasi hierarchy tata surya dan lampu; navigasi kamera memakai mouse.</p>
+          <p>Kontrol diimpor dari <code>three/addons/controls/OrbitControls.js</code>, menggunakan kamera aktif dan <code>renderer.domElement</code>, dengan target awal <code>(0, 1, 0)</code>. <code>enableDamping = true</code> memperhalus gerakan; <code>controls.update()</code> dipanggil sebelum <code>composer.render()</code> pada setiap frame.</p>
+        </div>
+        <div class="p6-table-wrap">
+          <table class="p6-table">
+            <thead><tr><th>Pengaturan</th><th>Nilai dan fungsi</th></tr></thead>
+            <tbody>
+              <tr><td><code>minDistance / maxDistance</code></td><td>3 / 25, batas jarak PerspectiveCamera dari target</td></tr>
+              <tr><td><code>minZoom / maxZoom</code></td><td>0.5 / 3, batas zoom OrthographicCamera</td></tr>
+              <tr><td><code>maxPolarAngle</code></td><td><code>Math.PI / 2 - 0.05</code>, batas orbit mendekati 90 derajat</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p6-prose p7-after-table">
+          <p>Batas polar berlaku terhadap target; pan masih dapat menggeser target sehingga pengaturan ini tidak menjamin posisi kamera selalu di atas ground.</p>
+          <p>Pergantian kamera mempertahankan posisi dan target, membuat ulang OrbitControls, dan memperbarui <code>renderPass.camera</code>. Reset (R) mengembalikan PerspectiveCamera ke <code>(7.5, 5.2, 9.5)</code>, target awal, FOV 52, dan zoom 1.</p>
+          <p>Untuk mencegah selection setelah orbit/pan, posisi pointer dicatat sejak <code>pointerdown</code>. Gerakan lebih dari 5 piksel dianggap drag, termasuk ketika pointer kembali ke titik awal. Event <code>click</code> setelah drag diabaikan; hover ditangguhkan selama pointer ditekan. <code>pointercancel</code> membatalkan gesture dan klik berikutnya dapat digunakan kembali untuk selection.</p>
+          <p><strong class="p6-accent">Coba:</strong> klik objek untuk memilih, drag melewati objek lain, lalu pastikan selection tetap sama. Uji zoom pada kedua mode kamera dan tekan R untuk mengembalikan tampilan awal.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">07</span><h2>Komponen Teknis yang Diimplementasikan</h2></div>
+        <div class="p6-prose">
+          <h3>Scene dan renderer</h3>
+          <p>Scene, <code>PerspectiveCamera</code>, <code>OrthographicCamera</code>, <code>WebGLRenderer</code>, resize responsif, <code>HemisphereLight</code>, <code>DirectionalLight</code>, <code>PointLight</code>, ground, shadow map, dan animation loop tersedia pada <code>js/praktikum7.js</code>. Frame time berasal dari <code>THREE.Clock.getDelta()</code> sehingga rotasi tidak bergantung pada jumlah frame.</p>
+
+          <h3>Scene graph dan local/world transform</h3>
+          <p><code>hierarchyGroup</code> berisi <code>parentMesh</code> dan <code>childMesh</code>. Child memakai posisi lokal <code>(1, 0.9, 0)</code> dan mengikuti rotasi parent. Panel selection menampilkan posisi lokal dan hasil <code>getWorldPosition()</code>. Karena:</p>
+          <pre class="p6-code"><code>childWorldMatrix = parentWorldMatrix × childLocalMatrix</code></pre>
+          <p>posisi lokal child tidak berubah ketika parent dirotasi, tetapi posisi world child berubah.</p>
+          <p>Challenge D memakai hierarchy lain:</p>
+          <pre class="p6-code"><code>Solar System
+└── Earth Orbit
+    └── Earth
+        └── Moon Orbit
+            └── Moon</code></pre>
+          <p>Orbit dihitung oleh transform parent, bukan dengan menghitung semua world position secara manual.</p>
+
+          <h3>PBR material dan gallery</h3>
+          <p>Prototype menggunakan <code>MeshStandardMaterial</code> dengan <code>roughness</code> dan <code>metalness</code>. Gallery berisi kombinasi tiga tingkat roughness dan tiga tingkat metalness, ditambah satu sphere besar yang mengikuti slider sehingga parameter dapat diuji secara langsung. Challenge E terpenuhi melalui gallery ini.</p>
+
+          <h3>GLB, hierarchy, texture, dan animation</h3>
+          <p><code>GLTFLoader</code> memuat <code>Duck.glb</code> secara asynchronous. Setelah berhasil dimuat, <code>gltf.scene</code> diberi transform, setiap descendant diperiksa dengan <code>traverse()</code>, dan seluruh mesh diberi <code>castShadow</code> serta <code>receiveShadow</code>. Panel HUD menampilkan jumlah clip. Jika tersedia clip, <code>AnimationMixer</code>, <code>clipAction()</code>, <code>fadeIn()</code>, <code>fadeOut()</code>, <code>play()</code>, dan <code>mixer.update(delta)</code> digunakan. Jika asset tidak menyediakan clip, prototype membuat tiga clip demonstrasi (<code>Idle</code>, <code>Walk</code>, <code>Run</code>) pada root model agar pergantian action tetap dapat dipelajari tanpa mengubah file GLB.</p>
+          <p>Challenge A dan B tersedia melalui tombol/keyboard pemilih clip dan click pada model. Clip fallback hanya memutar root untuk demonstrasi konsep <code>AnimationMixer</code>; asset karakter dengan animasi tulang tetap disarankan untuk hasil produksi.</p>
+
+          <h3>Raycasting, pointer NDC, hover, dan click</h3>
+          <p>Koordinat pointer dikonversi ke NDC:</p>
+          <pre class="p6-code"><code>pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+raycaster.setFromCamera(pointer, activeCamera);
+raycaster.intersectObjects(interactiveObjects, true);</code></pre>
+          <p>Argumen <code>true</code> penting karena mesh GLB sering berada sebagai descendant dari root model. <code>objectRoot()</code> mengembalikan root interaktif agar child mesh tidak menghasilkan selection terpisah. Hover state bersifat sementara, sedangkan selected state bersifat persisten. Ini memenuhi eksperimen recursive raycast, hover vs click, pointer coordinate, dan feedback visual.</p>
+          <p>Challenge F menyimpan warna emissive asli pada <code>material.userData.originalEmissive</code>, lalu memberi highlight warm amber (<code>#d88945</code>) saat hover, sehingga material tidak diubah secara destruktif. Challenge G memutar object terpilih berbasis delta time. Challenge C menampilkan name, local/world position, rotation, scale, dan material type pada selection information panel.</p>
+
+          <h3>Environment dan Bloom</h3>
+          <p>Prototype memuat panorama HDR lokal untuk background dan environment; CanvasTexture menjadi fallback jika pemuatan gagal. Challenge H dapat diuji dengan tombol <strong class="p6-accent">Environment (E)</strong>. Saat OFF, material PBR kehilangan kontribusi refleksi environment sehingga perbedaan material metal lebih mudah diamati.</p>
+          <p>Rendering menggunakan <code>EffectComposer</code>, <code>RenderPass</code>, <code>UnrealBloomPass</code>, dan <code>OutputPass</code>. Bloom aktif secara permanen pada emisi sphere kuning dan dapat di-toggle melalui panel. Hover memberi highlight pada material lain tanpa memadamkan emisi sphere kuning.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">08</span><h2>GLB Bertekstur yang Digunakan</h2></div>
+        <div class="p6-prose">
+          <p>File <code>Duck.glb</code> disertakan langsung di folder <code>assets/</code>. Sumbernya adalah sample asset resmi Khronos:</p>
+          <pre class="p6-code"><code>https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/Duck</code></pre>
+          <p>URL unduhan yang dipakai:</p>
+          <pre class="p6-code"><code>https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Duck/glTF-Binary/Duck.glb</code></pre>
+          <p>GLB cocok untuk distribusi offline karena mesh, buffer, dan texture yang dibutuhkan dapat dikemas ke dalam satu binary container. Tetap sertakan atribusi/license dari direktori asset ketika output dipublikasikan. Jika dosen memberikan model lain, ganti <code>Duck.glb</code> dengan file GLB tersebut dan pertahankan nama file atau ubah <code>MODEL_URL</code> pada <code>js/praktikum7.js</code>.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">09</span><h2>Checklist Tugas dan Challenge</h2></div>
+        <ul class="p6-checklist">
+          <li><input type="checkbox" checked disabled /> Scene, camera, renderer, lighting, ground, shadow, dan resize responsif.</li>
+          <li><input type="checkbox" checked disabled /> <code>THREE.Group</code>, parent-child, local transform, world transform, dan solar hierarchy.</li>
+          <li><input type="checkbox" checked disabled /> PBR StandardMaterial, roughness, metalness, dan material gallery.</li>
+          <li><input type="checkbox" checked disabled /> GLB asynchronous loading, <code>GLTFLoader</code>, <code>traverse()</code>, shadow, HUD status, dan fallback.</li>
+          <li><input type="checkbox" checked disabled /> AnimationMixer, action switching 1/2/3, click animation, dan delta-time update jika clip tersedia.</li>
+          <li><input type="checkbox" checked disabled /> Raycaster, pointer NDC, recursive intersection, hover, click, selection state, dan feedback.</li>
+          <li><input type="checkbox" checked disabled /> Environment toggle serta perbandingan material dengan/tanpa environment.</li>
+          <li><input type="checkbox" checked disabled /> Challenge A: multiple animation clips.</li>
+          <li><input type="checkbox" checked disabled /> Challenge B: click menjalankan animation.</li>
+          <li><input type="checkbox" checked disabled /> Challenge C: information panel.</li>
+          <li><input type="checkbox" checked disabled /> Challenge D: hierarchical solar system.</li>
+          <li><input type="checkbox" checked disabled /> Challenge E: PBR material gallery.</li>
+          <li><input type="checkbox" checked disabled /> Challenge F: hover emissive dengan penyimpanan state material.</li>
+          <li><input type="checkbox" checked disabled /> Challenge G: selection rotation berbasis delta time.</li>
+          <li><input type="checkbox" checked disabled /> Challenge H: environment toggle.</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <div class="section-heading"><span class="num">10</span><h2>Aset &amp; Catatan Offline</h2></div>
+        <div class="p6-prose">
+          <ul class="p6-list">
+            <li>Panorama: <strong class="p6-accent">Studio Small 09</strong> dan <strong class="p6-accent">Ladybrand Heritage House</strong> dari <a href="https://polyhaven.com/hdris" target="_blank" rel="noopener">Poly Haven</a>, lisensi CC0 (<a href="https://polyhaven.com/license" target="_blank" rel="noopener">polyhaven.com/license</a>). Format Radiance HDR, equirectangular 2:1, 1K.</li>
+            <li>Model: <strong class="p6-accent">Duck</strong> dari Khronos glTF Sample Assets.</li>
+          </ul>
+          <p>Selama <code>Duck.glb</code> dan file HDR tetap berada di folder <code>assets/</code>, aset dapat dimuat tanpa database maupun server aset eksternal. Browser tetap membutuhkan origin HTTP untuk module JavaScript dan loader asset; membuka HTML dengan <code>file://</code> secara langsung dapat diblokir. Library Three.js tetap dimuat dari CDN sesuai import map.</p>
+        </div>
+      </section>
+
+      <div class="footer-note"><span>Praktikum 7 · Three.js Interactive 3D Application</span><span>Three.js 0.185.1 · GLTFLoader · HDRLoader · EffectComposer</span></div>
+    </main>
+  </div>
+  <script src="js/nav.js"></script>
+  <script>
+    // Tampilkan pesan bila modul Three.js gagal dimuat (mis. offline atau CDN diblokir).
+    setTimeout(function () {
+      if (window.__p7Ready) return;
+      var status = document.getElementById("p7-status");
+      var fallback = document.getElementById("p7-fallback");
+      status.textContent = "Gagal memuat Three.js";
+      fallback.hidden = false;
+      fallback.textContent = "Three.js dimuat dari CDN jsDelivr. Pastikan koneksi internet aktif dan halaman dibuka melalui server HTTP (bukan file://).";
+    }, 10000);
+  </script>
+  <script type="module" src="js/praktikum7.js"></script>
+</body>
+</html>

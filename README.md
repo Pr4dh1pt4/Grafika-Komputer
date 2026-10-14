@@ -273,3 +273,50 @@ dengan koneksi internet.
 
 HUD menampilkan jenis kamera, FOV/zoom, transform cube, light, shadow map, segment, status
 animasi, serta `renderer.info` (draw calls, triangles, geometries, textures), jumlah objek, dan FPS.
+
+### 8. Praktikum 7 — Three.js Interactive 3D Application
+
+Praktikum 7 mengubah scene Three.js menjadi aplikasi interaktif: model GLB beranimasi, raycasting
+untuk hover dan selection, scene graph bertingkat, material PBR, panorama HDR, dan bloom.
+Three.js `0.185.1` dimuat dari jsDelivr melalui import map, sedangkan `Duck.glb` dan panorama
+HDR disimpan lokal di folder `assets/` (atribusi di `assets/README.md`). Buka `praktikum7.html`
+melalui server HTTP (Live Server atau `python -m http.server`), bukan `file://`.
+
+* **Scene graph**
+  - `hierarchyGroup` > `parentMesh` (kubus kaca `MeshPhysicalMaterial`, transmission 0.95) >
+    `childMesh` (sphere kuning emissive di posisi lokal `(1, 0.9, 0)`). Panel selection menampilkan
+    posisi lokal dan `getWorldPosition()`.
+  - Challenge D: `Solar System > Earth Orbit > Earth > Moon Orbit > Moon`; orbit berasal dari
+    rotasi group parent. `S` menjeda hierarchy, slider Orbit speed mengatur hierarchy dan orbit lampu.
+
+* **GLB dan animasi**
+  - `GLTFLoader.loadAsync()` memuat `Duck.glb`, `traverse()` mengaktifkan shadow tiap mesh, dan HUD
+    menampilkan status serta jumlah clip. Placeholder dipakai jika GLB gagal dimuat.
+  - Duck tidak membawa animasi, sehingga dibuat tiga clip fallback (`Idle`, `Walk`, `Run`) untuk
+    `AnimationMixer`. Challenge A: tombol/tombol keyboard `1`/`2`/`3` dengan `fadeIn`/`fadeOut`.
+    Challenge B: klik model menjalankan clip berikutnya.
+
+* **Raycasting dan selection**
+  - Pointer dikonversi ke NDC, `raycaster.intersectObjects(interactiveObjects, true)`, lalu
+    `objectRoot()` mencari root interaktif.
+  - Hover: emissive amber `#d88945` + scale 1.06; emissive asli disimpan di
+    `material.userData.originalEmissive` (Challenge F). Sphere kuning dan Sun tidak diubah emisinya.
+  - Selection: scale 1.12, rotasi berbasis delta time (Challenge G), dan panel informasi berisi
+    name, tipe, material, local/world position, rotation, scale, dan parent (Challenge C).
+  - Gerakan pointer lebih dari 5 piksel sejak `pointerdown` dianggap drag sehingga klik setelah
+    orbit/pan diabaikan; `pointercancel` membatalkan gesture.
+
+* **Material, environment, dan bloom**
+  - Challenge E: gallery 3 roughness × 3 metalness `MeshStandardMaterial` dan satu sphere yang
+    mengikuti slider Roughness/Metalness. Sphere silver memakai metalness 1 dan roughness 0.08.
+  - Panorama Studio Small 09, Ladybrand Heritage House, atau procedural (`HDRLoader` +
+    `PMREMGenerator`). Panorama lama tetap aktif selama pemuatan; hanya pilihan terakhir diterapkan.
+  - `P` menyalakan/mematikan latar, `E` mengatur `scene.environment` (Challenge H).
+  - `EffectComposer`: `RenderPass -> UnrealBloomPass (threshold 3) -> OutputPass` dengan ACES tone
+    mapping. Slider emissive intensity, bloom intensity, dan bloom radius.
+
+* **Kamera dan OrbitControls**
+  - Perspective/Orthographic (dropdown atau `C`), FOV 25–100, `minDistance`/`maxDistance` 3/25,
+    `minZoom`/`maxZoom` 0.5/3, `maxPolarAngle = Math.PI / 2 - 0.05`, serta enam parameter
+    OrbitControls seperti Praktikum 6. `R` mereset kamera ke `(7.5, 5.2, 9.5)`, panorama,
+    emisi/bloom, selection, hierarchy, dan solar animation.

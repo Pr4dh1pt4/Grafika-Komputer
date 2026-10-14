@@ -661,6 +661,39 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
   .p6-table td:first-child { white-space: normal; }
 }
 
+/* ---------- Praktikum 7 ---------- */
+.p7-playground { --p7-accent: #fbbf24; }
+.p7-canvas-wrap { min-width: 0; }
+#p7-canvas { width: 100%; aspect-ratio: 900 / 560; height: auto; display: block; cursor: grab; touch-action: none; }
+.p7-controls { flex-basis: 310px; gap: 15px; }
+.p7-controls .control-group { gap: 6px; }
+.p7-controls input[type="range"] { width: 100%; accent-color: var(--p7-accent); }
+.p7-controls input[type="range"]:disabled { opacity: 0.35; cursor: not-allowed; }
+.p7-controls output { color: var(--p7-accent); font: 11px var(--mono); }
+.p7-controls .control-group > label:first-child { display: flex; justify-content: space-between; }
+.p7-section { padding-top: 12px; border-top: 1px solid var(--border); }
+.p7-panorama-status { font: 11px var(--mono); color: var(--text-faint); line-height: 1.5; }
+.p7-clips .btn { flex: 1 1 0; padding: 7px 6px; font-size: 11.5px; }
+.p7-hud { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 14px; width: 100%; }
+.p7-hud span { color: var(--text-faint); min-width: 0; overflow-wrap: anywhere; }
+.p7-hud b { color: var(--text); font: 500 11px var(--mono); }
+.p7-info { width: 100%; background: #0a0c12; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+.p7-info-title { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.p7-info-title span { text-transform: none; letter-spacing: 0; color: var(--text-faint); font: 11px var(--mono); }
+.p7-info dl { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 5px 12px; margin: 0; font: 11.5px var(--mono); }
+.p7-info dt { color: var(--text-faint); }
+.p7-info dd { margin: 0; color: var(--text); overflow-wrap: anywhere; }
+.p7-list li { margin-bottom: 10px; line-height: 1.7; }
+.p7-subheading { font-size: 16px; margin: 26px 0 12px; }
+.p7-wide { max-width: none; }
+.p7-after-table { margin-top: 16px; }
+@media (max-width: 720px) {
+  .p7-controls { flex-basis: 100%; }
+  .p7-hud { grid-template-columns: 1fr; }
+  .p7-info dl { grid-template-columns: 1fr; gap: 2px; }
+  .p7-info dd { margin-bottom: 6px; }
+}
+
 @media (max-width: 980px) {
   .sidebar { position: fixed; left: 0; top: 0; z-index: 40; transform: translateX(-100%); transition: transform 0.2s; box-shadow: var(--shadow); }
   .sidebar.open { transform: translateX(0); }
