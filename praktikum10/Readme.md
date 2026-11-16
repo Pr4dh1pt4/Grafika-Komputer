@@ -26,11 +26,15 @@
 - **Packing:** Menggunakan Pack Islands dengan margin yang disesuaikan terhadap resolusi tekstur.
 
 Screenshot:
-- `screenshots/01_asset_sebelum_uv.png`
-- `screenshots/02_marked_seam.png`
-- `screenshots/03_initial_unwrap.png`
-- `screenshots/04_checker_test.png`
-- `screenshots/05_final_uv_layout.png`
+![GameBot sebelum UV mapping](screenshots/01_asset_sebelum_uv.png)
+
+![Seam yang ditandai pada model](screenshots/02_marked_seam.png)
+
+![Hasil unwrap awal](screenshots/03_initial_unwrap.png)
+
+![Pemeriksaan UV menggunakan checker](screenshots/04_checker_test.png)
+
+![Layout UV final](screenshots/05_final_uv_layout.png)
 
 ## 4. PBR Material dan Texture Maps
 
@@ -50,16 +54,26 @@ Pembagian material:
 - **Emission:** Mata dan indikator.
 - **Normal Detail:** Detail permukaan seperti garis panel dan baut.
 
-Screenshot:
-- `screenshots/06_pbr_node_graph.png`
-- `screenshots/07_texture_maps.png`
+![Node graph material PBR](screenshots/06_pbr_node_graph.png)
+
+![Texture maps](screenshots/07_texture_maps.png)
+
+Texture map yang digunakan:
+
+| Map | Preview |
+|---|---|
+| Base Color | ![Base color merah](textures/gamebot_basecolor_red.png) |
+| Roughness | ![Roughness](textures/gamebot_roughness.png) |
+| Metallic | ![Metallic](textures/gamebot_metallic.png) |
+| Normal | ![Normal map](textures/gamebot_normal.png) |
+| Emission | ![Emission](textures/gamebot_emission.png) |
 
 ## 5. Challenge
 
 1. **Metal + Painted Surface:** Memisahkan bagian logam dan permukaan cat merah menggunakan Metallic dan Roughness.
 2. **Custom Emission Mask:** Memberikan efek emission pada bagian mata dan indikator.
 
-Screenshot: `screenshots/08_challenge.png`
+![Challenge metal, painted surface, dan emission](screenshots/08_challenge.png)
 
 ## 6. Tugas Tambahan – Eksplorasi PBR Material
 
@@ -77,7 +91,7 @@ Pembagian Waktunya
 
 GameBot Red Edition telah melalui proses UV Mapping dan penerapan PBR Material. Model memiliki warna merah, bagian logam, serta emission pada mata dan indikator.
 
-Screenshot: `screenshots/09_final_material.png`
+![Hasil akhir GameBot Red Edition](screenshots/09_final_material.png)
 
 ## 9. Struktur Repository
 
