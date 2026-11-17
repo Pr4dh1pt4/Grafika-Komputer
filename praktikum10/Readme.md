@@ -77,10 +77,11 @@ Texture map yang digunakan:
 
 ## 6. Tugas Tambahan – Eksplorasi PBR Material
 
-- **Nama Model:** 
-- **Sumber:** 
-- **Lisensi:** 
-- **Texture Map Tersedia:** 
+- **Nama Model:** Metal049A — diterapkan pada primitive Cube/Sphere
+- **Sumber:** https://ambientcg.com/view?id=Metal049A
+- **Lisensi:** CC0 1.0
+- **Texture Map Tersedia:** Base Color, Roughness, Metalness, Normal (format GL), dll
+- **Catatan:** Dibandingkan dengan GameBot_PBR, material ini tidak memiliki Emission map karena bukan objek yang menyala. Normal map dari ambientCG memakai konvensi OpenGL, sama seperti setup GameBot sehingga tidak perlu dibalik channel hijaunya.
 
 
 ## 7. Kendala dan Solusi
